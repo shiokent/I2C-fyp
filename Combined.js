@@ -948,24 +948,23 @@ function fill_num(input, group){
 
 //disable for now try to fix touch events
 
-// function onMouseDown(event){
-//     var cursorX = event.point.x;
-//     var cursorY = event.point.y;
-//     var hitResult = close_ack_box.hitTest(event.point);
-//     activeItem = hitResult && hitResult.item;
-//     if(activeItem) {
-//         ack_group.visible= false;
-//         ack_true.visible = false;
-//         nack_true.visible = false;
-//     }
-//     var hitResult1 = read_group.children[2].hitTest(event.point);
-//     var activeItem1 = hitResult1 && hitResult1.item;
-//     if(activeItem1) {
-//         read_text.visible = false;
-//         write_text.visible = false;
-//         read_group.visible = false;
-//     }
-// }
+
+function onMouseDown(event){
+    var hitResult = close_ack_box.hitTest(event.point);
+    activeItem = hitResult && hitResult.item;
+    if(activeItem) {
+        ack_group.visible= false;
+        ack_true.visible = false;
+        nack_true.visible = false;
+    }
+    var hitResult1 = read_group.children[2].hitTest(event.point);
+    var activeItem1 = hitResult1 && hitResult1.item;
+    if(activeItem1) {
+        read_text.visible = false;
+        write_text.visible = false;
+        read_group.visible = false;
+    }
+}
 
 function seperate(digits, value){
     num = value;
