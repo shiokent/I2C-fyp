@@ -946,26 +946,26 @@ function fill_num(input, group){
 }
 
 
+//disable for now try to fix touch events
 
-
-function onMouseDown(event){
-    var cursorX = event.point.x;
-    var cursorY = event.point.y;
-    var hitResult = close_ack_box.hitTest(event.point);
-    activeItem = hitResult && hitResult.item;
-    if(activeItem) {
-        ack_group.visible= false;
-        ack_true.visible = false;
-        nack_true.visible = false;
-    }
-    var hitResult1 = read_group.children[2].hitTest(event.point);
-    var activeItem1 = hitResult1 && hitResult1.item;
-    if(activeItem1) {
-        read_text.visible = false;
-        write_text.visible = false;
-        read_group.visible = false;
-    }
-}
+// function onMouseDown(event){
+//     var cursorX = event.point.x;
+//     var cursorY = event.point.y;
+//     var hitResult = close_ack_box.hitTest(event.point);
+//     activeItem = hitResult && hitResult.item;
+//     if(activeItem) {
+//         ack_group.visible= false;
+//         ack_true.visible = false;
+//         nack_true.visible = false;
+//     }
+//     var hitResult1 = read_group.children[2].hitTest(event.point);
+//     var activeItem1 = hitResult1 && hitResult1.item;
+//     if(activeItem1) {
+//         read_text.visible = false;
+//         write_text.visible = false;
+//         read_group.visible = false;
+//     }
+// }
 
 function seperate(digits, value){
     num = value;
@@ -2306,9 +2306,52 @@ message_text.content = 'Show Message';
 message_text.fontSize = 30;
 
 //test funtion for hover text box (needs to be styled by css)
-message_text.on('mousedown', function() {
+
+function move_to_position(path1, object, group){
+    disable_play_buttons();
+    var final = path1.getPointAt(0)- new Point(0,30);
+    group.visible = false;
+    object.visible = true;
+    flag[0] = 1;
+    var offset = 0;
+    offset1 = 0;
+    var path = new Path();
+    path.add(object.position);
+    path.add(final);
+    var framehandler = function(event){
+        if(offset < path.length) {
+            object.position = path.getPointAt(offset);
+            offset+=speed;
+            progress_bar.dashArray = [offset1, 1000];
+            offset1+= progress_bar.length / (path.length/speed);
+        } else {
+            object.visible = false;
+            object.position = path.getPointAt(0);
+            group.position = final + new Point(0,21);
+            group.visible = true;
+            flag[0] = 0;
+            progress_bar.dashArray = [1000, 1000];
+            enable_play_buttons();
+            view.off('frame', framehandler)
+        }
+    }
+    view.on('frame', framehandler);
+}
+var message_flag = 0;
+
+var display_message = function(){
+    if(message_flag == 0){
         document.getElementById('master_popup').style.display = 'block';
-});
+        message_flag = 1;
+    } else if(message_flag == 1){
+        document.getElementById('master_popup').style.display = 'none';
+        message_flag = 0;
+    }
+}
+
+
+message_text.on('mousedown', display_message);
+
 
 message_text.on('mouseenter', function() {
     message_text.fillColor = 'grey';
@@ -3319,8 +3362,6 @@ function enable_play_buttons(){
     }
     document.getElementById('play_btn').disabled = false;
 }
-
-console.log('change');
 
 // var window = new Group();
 // window.addChild(layer1);
