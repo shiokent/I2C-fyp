@@ -4,14 +4,7 @@ body {
 }
 
 /* Scale canvas with resize attribute to full size */
-div.sticky {
-  position: relative;
-  overflow: hidden;
-  border: 1px black;
-  height : 50px;
-  width: 1000px;
-  top: 0px;
-}
+
 
 #myCanvas {
   position: relative;
@@ -32,8 +25,8 @@ div.sticky {
 .dropdown-content {
     display: none;
     position: absolute;
-    top: 350px;
-    left: 840px;
+    top: 380px;
+    left: 800px;
 
     background-color: #f9f9f9;
     min-width: 160px;
@@ -121,7 +114,7 @@ div.sticky {
   }
   
   .chat-container {
-    height: 200px;
+    height: 170px;
     overflow-y: scroll;
     padding-right: 16px;
   }
@@ -203,12 +196,12 @@ div.sticky {
 button {
   width: 130px;
   height: 40px;
-  background: linear-gradient(to bottom, #4eb5e5 0%,#389ed5 100%); /* W3C */
+  background-color:  rgb(9, 0, 88);
+  background-image: linear-gradient(rgb(63, 27, 223), rgb(9, 0, 88));
   border: none;
   border-radius: 5px;
   position: relative;
-  border-bottom: 4px solid #2b8bc6;
-  color: #fbfbfb;
+  color: #999;
   font-weight: 600;
   font-family: 'Open Sans', sans-serif;
   text-shadow: 1px 1px 1px rgba(0,0,0,.4);
@@ -219,6 +212,12 @@ button {
   cursor: pointer;
 }
 
+button:hover{
+  background-color: #288db4;
+  background-image: linear-gradient(#04acec, #0186ba);
+  color: #fafafa;
+}
+
 button:active {
   box-shadow: 0px 2px 0px 0px rgba(0,0,0,.2);
   top: 1px;
@@ -227,9 +226,7 @@ button:active {
 button:disabled {
   box-shadow: 0px 2px 0px 0px rgba(0,0,0,.2);
   top: 1px;
-  background: linear-gradient(to bottom, #0a658f 0%,#09496b 100%);
-  border-bottom: 4px solid #0a658f;
-  color: #29c2ba;
+  opacity: 0.3
 } 
 
 button:after {
@@ -237,10 +234,10 @@ button:after {
   width: 0;
   height: 0;
   display: block;
-  border-top: 20px solid #187dbc;
-  border-bottom: 20px solid #187dbc;
+  border-top: 20px solid #53729b;
+  border-bottom: 20px solid #53729b;
   border-left: 16px solid transparent;
-  border-right: 20px solid #187dbc;
+  border-right: 20px solid #53729b;
   position: absolute;
   opacity: 0.6; 
   right: 0;
@@ -260,10 +257,10 @@ button.back:after {
   width: 0;
   height: 0;
   display: block;
-  border-top: 20px solid #187dbc;
-  border-bottom: 20px solid #187dbc;
+  border-top: 20px solid #53729b;
+  border-bottom: 20px solid #53729b;
   border-right: 16px solid transparent;
-  border-left: 20px solid #187dbc;
+  border-left: 20px solid #53729b;
   position: absolute;
   opacity: 0.6; 
   left: 0;
@@ -280,17 +277,23 @@ button.site:after{
   display: none;
 }
 
-#enable_btn {
-  position: relative;
-  left: 100px;
-  width: 150px;
+button.site:hover{
+  background-color: #288db4;
+  background-image: linear-gradient(#04acec, #0186ba);
+  color: #fafafa;
 }
 
-#read_btn {
+/* #enable_btn {
   position: relative;
   left: 100px;
   width: 150px;
-}
+} */
+
+/* #read_btn {
+  position: relative;
+  left: 100px;
+  width: 150px;
+} */
 
 #prev_btn {
   position: relative;
@@ -307,6 +310,27 @@ button.site:after{
   left: 350px;
 }
 
+#btn1 {
+  position: relative;
+  color: #999;
+  width: 30px;
+  height: 20px;
+  background-color:  rgb(9, 0, 88);
+  background-image: linear-gradient(rgb(63, 27, 223), rgb(9, 0, 88));
+  border-bottom: 0px;
+}
+
+#btn2 {
+  position: relative;
+  color: #999;
+  width: 30px;
+  height: 20px;
+  background-color:  rgb(9, 0, 88);
+  background-image: linear-gradient(rgb(63, 27, 223), rgb(9, 0, 88));
+  border-bottom: 0px;
+}
+
+#btn1 
 /* #btn1 {
   position: relative;
   left: 10px;
@@ -318,3 +342,133 @@ button.site:after{
   top: 10px;
   left: 10px;
 } */
+
+#menu, #menu ul {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+/* div.sticky {
+  position: relative;
+  overflow: hidden;
+  border: 1px black;
+  height : 50px;
+  width: 1000px;
+  top: 0px;
+} */
+
+#menu {
+  position: relative;
+  top: 0px;
+  left: 0 px;
+  width: 1060px;
+  /* margin: 60px auto; */
+  border: 1px solid #222;
+  background-color:  rgb(9, 0, 88);
+  background-image: linear-gradient(rgb(63, 27, 223), rgb(9, 0, 88));
+  border-radius: 6px;
+  box-shadow: 0 1px 1px #777;
+}
+
+#menu:before,
+#menu:after {
+    content: "";
+    display: table;
+}
+
+#menu:after {
+    clear: both;
+}
+
+#menu {
+    zoom:1;
+}
+
+#menu li {
+  float: left;
+  border-right: 1px solid #222;
+  box-shadow: 1px 0 0 #444;
+  position: relative;
+}
+
+#menu a {
+  float: left;
+  padding: 12px 30px;
+  color: #999;
+  text-transform: uppercase;
+  font: bold 12px Arial, Helvetica;
+  text-decoration: none;
+  text-shadow: 0 1px 0 #000;
+}
+
+#menu li:hover > a {
+  color: #fafafa;
+}
+
+#menu ul {
+  margin: 20px 0 0 0;
+  _margin: 0; /*IE6 only*/
+  opacity: 0;
+  visibility: hidden;
+  position: absolute;
+  top: 38px;
+  left: 0;
+  z-index: 1;    
+  background-color:  rgb(9, 0, 88);
+  background-image: linear-gradient(rgb(63, 27, 223), rgb(9, 0, 88));
+  box-shadow: 0 -1px 0 rgba(255,255,255,.3);  
+  border-radius: 3px;
+  transition: all .2s ease-in-out;
+}
+
+#menu li:hover > ul {
+  opacity: 1;
+  visibility: visible;
+  margin: 0;
+}
+
+#menu ul ul {
+  top: 0;
+  left: 150px;
+  margin: 0 0 0 20px;
+  _margin: 0; /*IE6 only*/
+  box-shadow: -1px 0 0 rgba(255,255,255,.3);      
+}
+
+#menu ul li {
+  float: none;
+  display: block;
+  border: 0;
+  _line-height: 0; /*IE6 only*/
+  box-shadow: 0 1px 0 #111, 0 2px 0 #666;
+}
+
+#menu ul li:last-child {   
+  box-shadow: none;    
+}
+
+#menu ul a {    
+  padding: 10px;
+  display: block;
+  white-space: nowrap;
+  float: none;
+  text-transform: none;
+}
+
+#menu ul a:hover {
+  background-color: #288db4;
+  background-image: linear-gradient(#04acec, #0186ba);
+}
+#speed_bar{
+  width: 170px;
+  color: #999;
+}
+#speed_text {
+  display: inline;
+}
+#enable {
+  width: 270px;
+}
+#read {
+  width: 320px;
+}

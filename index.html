@@ -10,7 +10,7 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 </head>
 <body>
-    <div id = "form-wrap" class= "sticky">
+    <!-- <div id = "form-wrap" class= "sticky">
         <form id="form1">
           <button class="back" id = "btn1" type = 'button'>Speed Down</button>
           <button class="button" id = "btn2" type = 'button'>Speed Up</button>
@@ -18,7 +18,41 @@
           <button class = 'site' id = 'enable_btn' type = 'button'>Enable Light Sensor</button>
           <button class = 'site' id = 'read_btn' type = 'button'>Read From Light Sensor</button>
         </form>
-    </div>  
+    </div>   -->
+    <ul id = "menu">
+      <!-- <form id="form1">
+          <button class="back" id = "btn1" type = 'button'>Speed Down</button>
+          <button class="button" id = "btn2" type = 'button'>Speed Up</button>
+          <button class = 'site' id = 'enable_btn' type = 'button'>Enable Light Sensor</button>
+          <button class = 'site' id = 'read_btn' type = 'button'>Read From Light Sensor</button>
+        </form> -->
+      <li>
+        <a href="#">Animation Speed</a>
+        <ul id = "speed_bar">
+            <button class="site" id = "btn2" type = 'button'>--</button>
+            <button class="site" id = "btn1" type = 'button'>++</button>
+            Speed: 
+            <p id = 'speed_text'>2</p>
+        </ul>
+      </li>
+      <li>
+        <a href="#">Enabling Light Sensor Scenario</a>
+        <ul id = 'enable'>
+            <li><a href="#" id = 'enable_btn'>1 Initiating The Connection</a></li>
+            <li><a href="#" id = 'enable_set_2'>2 Accssing The Command Register</a></li>
+            <li><a href="#" id = 'enable_set_3'>3 Writing To Register</a></li>
+        </ul>
+      </li>
+      <li>
+          <a href="#">Reading From Light Sensor Scenario</a>
+          <ul id = 'read'>
+              <li><a href="#" id = 'read_btn'>1 Initiating The Connection</a></li>
+              <li><a href="#" id = 'read_set_2'>2 Accssing The LSB_Sensor Register</a></li>
+              <li><a href="#" id = 'read_set_3'>3 Initiating New Connection With Direction Change</a></li>
+              <li><a href="#" id = 'read_set_4'>4 Reading from LSB_Sensor Register</a></li>
+          </ul>
+        </li>
+    </ul>
     
     
     <div id = "page-1">

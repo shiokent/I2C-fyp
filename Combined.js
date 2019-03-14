@@ -2284,20 +2284,21 @@ progress_bar.add(new Point(750, 500));
 progress_bar.visible = false;
 
 
-var speed_text = new PointText(new Point(50,20));
-speed_text.content = 'Speed:';
-var speed_num = new PointText(new Point(90,20));
-speed_num.content = speed;
+var scenario = new PointText(new Point(50,30));
+scenario.content = 'Choose A Scenario To Begin';
+scenario.fontSize = 20;
+scenario.fontWeight = 'bold';
+scenario.fillColor = 'black';
 
-btn1.onclick = function update(){
+btn2.onclick = function update(){
     if(speed>1){
         speed-=1;
     }
-    speed_num.content = speed;
+    document.getElementById("speed_text").innerHTML = speed;
 }
-btn2.onclick = function update(){
+btn1.onclick = function update(){
     speed+=1;
-    speed_num.content = speed;
+    document.getElementById("speed_text").innerHTML = speed;
 }
 
 message_text = new PointText(new Point(890, 300))
@@ -2640,11 +2641,13 @@ function show_layer(num){
         case 1:
             layer1.visible = true;
             layer2.visible = false;
+            scenario.content = 'Enabling The Light Sensor';
             break;
         case 2:
             value_item.visible = false;
             layer1.visible = false;
             layer2.visible = true;
+            scenario.content = 'Reading From The Light Sensor';
             break;
     }
 
@@ -3233,6 +3236,7 @@ function clear_waves(){
 
 function clear_all(){
     all_waves.removeChildren();
+    number_text.removeChildren();
     clear_control();
     show_en_diagram(0);
     show_read_diagram(0);
@@ -3288,6 +3292,20 @@ enable_btn.onclick = function update(){
     enable_play_buttons();
 }
 
+enable_set_2.onclick = function update(){
+    clear_all();
+    show_read_page(0);
+    scene_num = 10;
+    compiled_enable_scenario(scene_num);
+}
+
+enable_set_3.onclick = function update(){
+    clear_all();
+    show_read_page(0);
+    scene_num = 17;
+    compiled_enable_scenario(scene_num);
+}
+
 read_btn.onclick = function update(){
     clear_all();
     scene = 2;
@@ -3301,6 +3319,26 @@ read_btn.onclick = function update(){
     enable_play_buttons();
 }
 
+read_set_2.onclick = function update(){
+    clear_all();
+    show_page(0);
+    scene_num = 10;
+    compiled_read_scenario(scene_num);
+}
+
+read_set_3.onclick = function update(){
+    clear_all();
+    show_page(0);
+    scene_num = 19;
+    compiled_read_scenario(scene_num);
+}
+
+read_set_4.onclick = function update(){
+    clear_all();
+    show_page(0);
+    scene_num = 28;
+    compiled_read_scenario(scene_num);
+}
 
 
 prev_btn.onclick = function update(){
