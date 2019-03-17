@@ -18,10 +18,7 @@ body {
     width: 100%;
     height: 50%;
 } */
-.dropdown {
-    position: relative;
-    display: inline-block;
-}
+
 .dropdown-content {
     display: none;
     position: absolute;
@@ -33,6 +30,29 @@ body {
     box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
     padding: 12px 16px;
     z-index: 1;
+}
+
+.dropdown-content_1 {
+  display: none;
+  position: absolute;
+  background-color: #f9f9f9;
+  min-width: 160px;
+  box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+  padding: 12px 16px;
+  z-index: 1;
+}
+#diagram_1{
+  height: 300px;
+  width: 300px;
+  top: 130px;
+  left: 300px;
+}
+
+#diagram_2{
+  height: 300px;
+  width: 400px;
+  top: 130px;
+  left: 300px;
 }
 
 #wrapper {
@@ -220,7 +240,6 @@ button:hover{
 
 button:active {
   box-shadow: 0px 2px 0px 0px rgba(0,0,0,.2);
-  top: 1px;
 }
 
 button:disabled {
@@ -310,11 +329,18 @@ button.site:hover{
   left: 350px;
 }
 
+#feedback {
+  position: relative;
+  width: 100px;
+  left: 600px;
+}
+
 #btn1 {
   position: relative;
   color: #999;
+  top: 3px;
   width: 30px;
-  height: 35px;
+  height: 20px;
   background-color:  rgb(9, 0, 88);
   background-image: linear-gradient(rgb(63, 27, 223), rgb(9, 0, 88));
   border-bottom: 0px;
@@ -323,6 +349,7 @@ button.site:hover{
 #btn2 {
   position: relative;
   color: #999;
+  top: 3px;
   width: 30px;
   height: 20px;
   background-color:  rgb(9, 0, 88);
@@ -460,15 +487,110 @@ button.site:hover{
   background-image: linear-gradient(#04acec, #0186ba);
 }
 #speed_bar{
-  width: 170px;
+  height: 65px;
+  width: 250px;
   color: #999;
+  font-size: 15px;
+}
+#spd_text {
+  display: inline;
+  position: relative;
+  top: 3px;
 }
 #speed_text {
   display: inline;
+  position: relative;
+  top: 3px;
 }
 #enable {
   width: 270px;
 }
 #read {
   width: 320px;
+}
+
+.overlay {
+  position: absolute; /* Sit on top of the page content */
+  margin: auto;
+  top: 50px; left: 50x;
+  bottom: 50px; right: 50px;
+  overflow: scroll;
+  display: block; /* Hidden by default */
+  width: 100%; /* Full width (cover the whole page) */
+  height: 100%; /* Full height (cover the whole page) */
+  top: 0; 
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0,0,0,0.5); /* Black background with opacity */
+  z-index: 2; /* Specify a stack order in case you're using a different order for other elements */
+  cursor: pointer; /* Add a pointer on hover */
+}
+
+#prior_survey{
+  position: relative; 
+  margin: auto;
+  top: 50px; 
+  left: 200px;
+  bottom: 50px; 
+  right: 50px;
+  overflow: scroll;
+}
+
+#feedback_survey{
+  position: relative; 
+  margin: auto;
+  top: 50px; 
+  left: 200px;
+  bottom: 50px; 
+  right: 50px;
+  overflow: scroll;
+}
+
+#instructions{
+  padding: 10px;
+  position: relative;
+  border: 1px solid black;
+  background-color: white;
+  margin: auto;
+  top: 100px; 
+  left: 50x;
+  bottom: 50px; 
+  right: 400px;
+  width: 500px;
+  height: 200px;
+}
+
+#close_instructions{
+  position: relative;
+  left: 200px;
+  top: 10px;
+  height: 30px;
+}
+
+#close_prior{
+  position: relative;
+  height: 100px;
+  width: 200px;
+  left: 200px;
+  bottom: 500px;
+}
+
+#close_feedback{
+  position: relative;
+  height: 100px;
+  width: 200px;
+  left: 200px;
+  bottom: 500px;
+}
+
+#instructions_overlay{
+  display: none;
+  background-color: rgba(0,0,0,0);
+}
+/* #first_survey {
+  display: none;
+} */
+#last_survey {
+  display: none;
 }

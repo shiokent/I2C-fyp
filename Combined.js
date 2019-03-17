@@ -168,6 +168,18 @@ var small_box_length = 20;
 var data_box_length = 100;
 var address_box_length = 120;
 
+var diagram1_button = new Group();
+var button_box = new Path.Rectangle(new Point(400, 30), new Size(130,30));
+button_box.strokeColor = 'black';
+button_box.fillColor = 'darkgray';
+// button_box.opacity = 0.3;
+var text = new PointText(new Point(405, 50));
+text.content = 'What is this diagram?';
+text.opacity = 1;
+diagram1_button.addChild(button_box);
+diagram1_button.addChild(text);
+diagram1_button.position += new Point(100, -20);
+
 function draw_start_box(control, group, coordinate, num){
     content = 'S';
     drawbox(control, num, coordinate, 20, group, content, nth);
@@ -724,6 +736,8 @@ testing.strokeColor = 'black';
 
 
 function move_waveform(destination, group){
+    var clone = all_waves.clone();
+    clone.visible = true;
     disable_play_buttons();
     all_waves.visible = true;
     flag[0] = 1;
@@ -738,15 +752,15 @@ function move_waveform(destination, group){
 
     var framehandler = function(event){
         if(offset < path.length) {
-            all_waves.position = path.getPointAt(offset);
-            all_waves.scale(scaling);
+            clone.position = path.getPointAt(offset);
+            clone.scale(scaling);
             offset+=speed;
             progress_bar.dashArray = [offset1, 1000];
             offset1+= progress_bar.length / (a*0.99);
         } else {
             flag[0] = 0;
-            all_waves.removeChildren();
-            number_text.removeChildren();
+            clone.removeChildren();
+            // number_text.removeChildren();
             group.visible = true;
             progress_bar.dashArray = [1000, 1000];
             enable_play_buttons();
@@ -1020,6 +1034,10 @@ function clearboxes(){
     stop_group.visible = false;
 }
 
+var boxes_group = new Group();
+boxes_group.addChildren([ack_group, ack_true, nack_true, read_group, read_text, write_text, start_group, stop_group]);
+
+
 function read_or_write(input) {
     read_group.visible = true;
     length = input.toString().length;
@@ -1233,14 +1251,18 @@ function enable_scenario(num) {
             break;
         case 1:
             all_waves.removeChildren();
+            // clearboxes();
+            // clear_control();
             illustrate(all_waves, 0, 0);
             show_en_diagram(0);
+            start_control(0);
+            byte_control(0);
+            ack_control(1);
+            show_start();
             change_waveform('10001000');
             read_or_write('w');
             ack_or_nack('y');
             fill_num('100010000', number_text);
-            clearboxes();
-            clear_control();
             move_waveform(set_1.position, en_diagram.children[0]);
             break;       
         case 2:
@@ -1258,11 +1280,13 @@ function enable_scenario(num) {
             all_waves.removeChildren();
             illustrate(all_waves, 1, 0);
             show_en_diagram(1);
+            byte_control(0);
+            ack_control(1);
             ack_or_nack('y');
             change_waveform('00000000');
             fill_num('000000000', number_text);
-            clearboxes();1
-            clear_control();
+            // clearboxes();
+            // clear_control();
             move_waveform(set_2.position, en_diagram.children[1]);
             break;
         case 4:
@@ -1282,11 +1306,15 @@ function enable_scenario(num) {
             all_waves.removeChildren();
             illustrate(all_waves, 2, 0);
             show_en_diagram(2);
+            byte_control(0);
+            ack_control(1);
+            stop_control(0);
             change_waveform('10000000');
             ack_or_nack('y');
             fill_num('100000000', number_text);
-            clear_control();
-            clearboxes();
+            stop_group.visible = true;
+            // clear_control();
+            // clearboxes();
             move_waveform(set_3.position, en_diagram.children[2]);
             break;         
     }
@@ -1310,12 +1338,16 @@ function read_scenario(num) {
         case 1:
             all_waves.removeChildren();
             illustrate(all_waves, 0, 0);
+            start_control(0);
+            byte_control(0);
+            ack_control(1);
+            show_start();
             change_waveform('10001000');
             read_or_write('w');
             ack_or_nack('y');
             fill_num('100010000', number_text);
-            clearboxes();
-            clear_control();
+            // clearboxes();
+            // clear_control();
             show_read_diagram(0);
             move_waveform(read_diagram.children[0].position, read_diagram.children[0]);
             break;       
@@ -1335,12 +1367,15 @@ function read_scenario(num) {
         case 3:
             all_waves.removeChildren();
             illustrate(all_waves, 2, 0);
+            byte_control(0);
+            ack_control(1);
+            stop_control(0);
             change_waveform('00001000');
             ack_or_nack('y');
             fill_num('000010000', number_text);
             stop_group.visible = true;
-            clearboxes();
-            clear_control();
+            // clearboxes();
+            // clear_control();
             show_read_diagram(1);
             move_waveform(read_diagram.children[1].position, read_diagram.children[1]);
             break;     
@@ -1361,12 +1396,16 @@ function read_scenario(num) {
         case 5:
             all_waves.removeChildren();
             illustrate(all_waves, 0, 0);
+            start_control(0);
+            byte_control(0);
+            ack_control(1);
+            show_start();
             change_waveform('10001000');
             read_or_write('r');
             ack_or_nack('y');
             fill_num('100010010', number_text);
-            clearboxes();
-            clear_control();
+            // clearboxes();
+            // clear_control();
             show_read_diagram(2);
             move_waveform(read_diagram.children[2].position, read_diagram.children[2]);
             break; 
@@ -1386,12 +1425,15 @@ function read_scenario(num) {
         case 7:
             all_waves.removeChildren();
             illustrate(all_waves, 2, 0);
+            byte_control(1);
+            ack_control(0);
+            stop_control(0);
             change_waveform('11001011');
             ack_or_nack('n');
             fill_num('110010111', number_text);
             stop_group.visible = true;
-            clearboxes();
-            clear_control();
+            // clearboxes();
+            // clear_control();
             show_read_diagram(3);
             move_waveform(read_diagram.children[3].position, read_diagram.children[3]);
             break; 
@@ -1459,6 +1501,10 @@ for(var i = 1; i<5; i++){
     var circleclone = slave_circle.clone();
     circleclone.position +=new Point(0,i*spacing);
 }
+
+diagram2_button = diagram1_button.clone();
+layer2.addChild(diagram2_button);
+diagram2_button.position += new Point(-100, 0);
 
 //invisible left lines drawing
 var left_path = new Group()
@@ -2266,9 +2312,45 @@ function read_scenario_2(num){
 
 
 layer2.visible = false;
-
+layer1.visible = false;
 
 layer3 = new Layer();
+
+var instruction_overlay = new Group();
+var arrow = new Group();
+var box = new Path.Rectangle(new Point(100,100), new Size(15,45));
+box.fillColor = 'red';
+var triangle = new Path.RegularPolygon(new Point(107, 100), 3, 20);
+triangle.fillColor = 'red';
+arrow.addChild(box);
+arrow.addChild(triangle);
+arrow.rotate(180);
+arrow.position += new Point(305, 330);
+instruction_overlay.addChild(arrow);
+var text = new PointText(new Point (340, 400));
+text.strokeColor = 'red';
+text.fontSize = 15;
+text.content = 'Controls and Progress Bar';
+instruction_overlay.addChild(text);
+var box = new Path.Rectangle(new Point(880,30), new Size(390, 300));
+box.strokeColor = 'red';
+instruction_overlay.addChild(box);
+var instruction_text = text.clone();
+instruction_text.content = 'Instructional text will be located here.';
+instruction_text.position += (new Point(550, -350));
+instruction_overlay.addChild(instruction_text);
+menu_arrow = arrow.clone();
+menu_arrow.rotate(180);
+menu_arrow.position += new Point(-200, -400);
+menu_text = instruction_text.clone();
+menu_text.content = 'Menu';
+menu_text.position += new Point(-695, 50);
+feedback_arrow = arrow.clone();
+feedback_arrow.position += new Point(650, 15);
+feedback_text = text.clone();
+feedback_text.content = 'Open Feedback Form';
+feedback_text.position += new Point(650, 15);
+
 
 var progress_bar_wrapper = new Path();
 progress_bar_wrapper.strokeColor = 'darkgray';
@@ -2284,8 +2366,8 @@ progress_bar.add(new Point(750, 500));
 progress_bar.visible = false;
 
 
-var scenario = new PointText(new Point(50,30));
-scenario.content = 'Choose A Scenario To Begin';
+var scenario = new PointText(new Point(50,25));
+scenario.content = '';
 scenario.fontSize = 20;
 scenario.fontWeight = 'bold';
 scenario.fillColor = 'black';
@@ -2304,6 +2386,7 @@ btn1.onclick = function update(){
 message_text = new PointText(new Point(890, 300))
 message_text.content = 'Show Message';
 message_text.fontSize = 30;
+message_text.visible = false;
 
 //test funtion for hover text box (needs to be styled by css)
 
@@ -2349,6 +2432,9 @@ var display_message = function(){
     }
 }
 
+// var display_diagram1_text = function(){
+
+// }
 
 message_text.on('mousedown', display_message);
 
@@ -2361,6 +2447,31 @@ message_text.on('mouseleave', function() {
     message_text.fillColor = 'black';
 });
 
+diagram1_button.on('mouseenter', function(){
+    diagram1_button.children[0].fillColor = 'lightgray';
+    diagram1_button.children[1].fillColor = 'darkgray';
+    document.getElementById('diagram_1').style.display = 'block';
+});
+
+diagram1_button.on('mouseleave', function(){
+    diagram1_button.children[0].fillColor = 'darkgray';
+    diagram1_button.children[1].fillColor = 'black';
+    document.getElementById('diagram_1').style.display = 'none';
+});
+
+diagram2_button.on('mouseenter', function(){
+    diagram2_button.children[0].fillColor = 'lightgray';
+    diagram2_button.children[1].fillColor = 'darkgray';
+    document.getElementById('diagram_2').style.display = 'block';
+});
+
+diagram2_button.on('mouseleave', function(){
+    diagram2_button.children[0].fillColor = 'darkgray';
+    diagram2_button.children[1].fillColor = 'black';
+    document.getElementById('diagram_2').style.display = 'none';
+});
+
+// diagram1_button.on('mousedown', display_diagram1_text)
 
 
 pages = new Group();
@@ -2414,41 +2525,43 @@ add_page(pages, '9 The register address is sent by the master and then acknowled
 add_page(pages, '10 Finally, the master will transmit the value which to write onto the register, bit 7 controls the enabling of the LSB sensor, with 0 disabling the ADC-core, and 1 enabling the ADC-core. As such our waveform will show 1000000, with an acknowledge bit of 0. We then want to stop communications which requires a stop condition to be transmitted by the master, which is defined as the SDA going from low to high while SCL is high.');
 //11
 add_page(pages, '11 As such the value will first be transmitted by the master, followed by an acknowledge from the slave, and finally a stop condition from the master.')
+//12 
+add_page(pages, '12 This is the last page for this scene. You can either go through the Reading scenario if you have not, or go on to complete the feedback survey');
 
 //1
-add_page(read_pages, "Read 1 This application will be simulating the process of I2C communications between a Master and Slave for the purposes of enabling a LSB sensor. On the left you will see a waveform being drawn that will depict the data to be communicated between the Master and Slave. Any part of the diagram being highlighted in light blue is being controlled by the Master, while anything highlighted in yellow is being controlled by the Slave.");
+add_page(read_pages, "1 This application will be simulating the process of I2C communications between a Master and Slave for the purposes of enabling a LSB sensor. On the left you will see a waveform being drawn that will depict the data to be communicated between the Master and Slave. Any part of the diagram being highlighted in light blue is being controlled by the Master, while anything highlighted in yellow is being controlled by the Slave.");
 //2
-add_page(read_pages, "Read 2 We will be simulating the process of reading from the light sensor. The first set of signals are a start condition, the slave address and a write bit. The address of the LSB sensor: 0x44, or 1000100, however since the 8th bit is set to 0 to indicate a write transmission, the actual byte to be sent is 10001000 or 0x88, followed by an acknowledge bit as can be seen on the diagram to the left.");
+add_page(read_pages, "2 We will be simulating the process of reading from the light sensor. The first set of signals are a start condition, the slave address and a write bit. The address of the LSB sensor: 0x44, or 1000100, however since the 8th bit is set to 0 to indicate a write transmission, the actual byte to be sent is 10001000 or 0x88, followed by an acknowledge bit as can be seen on the diagram to the left.");
 //3
-add_page(read_pages, "Read 3 This series of communications can be presented as such, in a block diagram.");
+add_page(read_pages, "3 This series of communications can be presented as such, in a block diagram.");
 //4
-add_page(read_pages, "Read 4 We will now proceed to view how each part of the signal is transmitted by the master/slave. To the left you can see a number of masters represented by the light blue circles, while slaves are represented by the yellow circles. As I2C is a half-duplex, serial communication, only one device can transmit at any point in time. Furthermore, there is collision detection and arbitration to allow for multiple masters. At any point when one master4 is communicating, no other masters will be able to communicate, this is represented by the traffic light which will show which master is communicating while the others are forced to stop.");
+add_page(read_pages, "4 We will now proceed to view how each part of the signal is transmitted by the master/slave. To the left you can see a number of masters represented by the light blue circles, while slaves are represented by the yellow circles. As I2C is a half-duplex, serial communication, only one device can transmit at any point in time. Furthermore, there is collision detection and arbitration to allow for multiple masters. At any point when one master is communicating, no other masters will be able to communicate, this is represented by the traffic light which will show which master is communicating while the others are forced to stop.");
 //5
-add_page(read_pages, "Read 5 The start condition is given by the master to the bus, and all slaves start listening to the bus. As I2C communication is half-duplex, only one device can transmit at any time, in this way it is somewhat like having a conversation where each party has to affirm that they have received a message. Click the Show Message button below to see a representation of a conversation between the master and slave as each bit is sent across.");
+add_page(read_pages, "5 The start condition is given by the master to the bus, and all slaves start listening to the bus. As I2C communication is half-duplex, only one device can transmit at any time, in this way it is somewhat like having a conversation where each party has to affirm that they have received a message. Click the Show Message button below to see a representation of a conversation between the master and slave as each bit is sent across.");
 //6
-add_page(read_pages, 'Read 6 The master will now propagate the slave address it wants to communicate with onto the bus followed by a write bit, for this demonstration, our top most slave is the LSB sensor with the Slave Address 0x44.');
+add_page(read_pages, '6 The master will now propagate the slave address it wants to communicate with onto the bus followed by a write bit, for this demonstration, our top most slave is the LSB sensor with the Slave Address 0x44.');
 //7
-add_page(read_pages, 'Read 7 The slave then acknowledges that it has received the message by replying with an acknowledge bit.');
+add_page(read_pages, '7 The slave then acknowledges that it has received the message by replying with an acknowledge bit.');
 //8
-add_page(read_pages, 'Read 8 The next step is for the Master to instruct the slave on the register it wants to access, in this case we want to read from the light sensor register address with address 0x04 or 00000100. This is followed by an acknowledge bit from the slave. A stop condition is also necessary as we will need to initiate a change in direction of communication.');
+add_page(read_pages, '8 The next step is for the Master to instruct the slave on the register it wants to access, in this case we want to read from the light sensor register address with address 0x04 or 00000100. This is followed by an acknowledge bit from the slave. A stop condition is also necessary as we will need to initiate a change in direction of communication.');
 //9
-add_page(read_pages, 'Read 9 The register address is transmitted by the Master, followed by an acknowledge from the slave. Communications are then stopped with a stop condition propagated from the master.')
+add_page(read_pages, '9 The register address is transmitted by the Master, followed by an acknowledge from the slave. Communications are then stopped with a stop condition propagated from the master.')
 //10
-add_page(read_pages, 'Read 10 Communications are then stopped with a stop condition propagated from the master');
+add_page(read_pages, '10 Communications are then stopped with a stop condition propagated from the master');
 //11
-add_page(read_pages, 'Read 11 We need initiate another start condition together with the slave address since we closed our last set of communications. Once again the actual byte of data to be sent is shifted since the read bit needs to be included.');
+add_page(read_pages, '11 We need initiate another start condition together with the slave address since we closed our last set of communications. Once again the actual byte of data to be sent is shifted since the read bit needs to be included.');
 //12
-add_page(read_pages, 'Read 12 The process is the same as the first time communications are initiated, except the master specifies that it wants to read instead of write.');
+add_page(read_pages, '12 The process is the same as the first time communications are initiated, except the master specifies that it wants to read instead of write.');
 //13
-add_page(read_pages, 'Read 13 The data read from the slave is 11001011 or 0xCB. We will then close communications with a not acknowledge (NACK) bit and a stop condition.');
+add_page(read_pages, '13 The data read from the slave is 11001011 or 0xCB. We will then close communications with a not acknowledge (NACK) bit and a stop condition.');
 //14
-add_page(read_pages, 'Read 14 The data is sent from the slave to the master.');
+add_page(read_pages, '14 The data is sent from the slave to the master.');
 //15
-add_page(read_pages, 'Read 15 If we wanted to continue reading from the slave, we would transmit an acknowledge bit. However, as we want to stop communications, a NACK bit is transmitted instead.');
+add_page(read_pages, '15 If we wanted to continue reading from the slave, we would transmit an acknowledge bit. However, as we want to stop communications, a NACK bit is transmitted instead.');
 //16
-add_page(read_pages, 'Read 16 It is followed by a stop condition to finish the transfer.');
+add_page(read_pages, '16 It is followed by a stop condition to finish the transfer.');
 //17
-add_page(read_pages, 'Read 17 While in this demonstration we initiated a new series of communication, it is also possible to immediately change direction without first initiating start condition. Instead, a repeated start condition would take the place of the second start condition');
+add_page(read_pages, '17 While in this demonstration we initiated a new series of communication, it is also possible to immediately change direction without first initiating start condition. Instead, a repeated start condition would take the place of the second start condition                                                           This is the last page for this scene. You can either look through the Enable scenario if you have not or go on to complete the survey.');
 
 show_read_page(0);
 show_page(0);
@@ -2922,7 +3035,8 @@ function compiled_enable_scenario(num){
             show_box_children(box_diagram.children[2], 3);
             // add_message(chatMessages[7]);
             add_message_mass(chatMessages, 7);
-            show_page(11);
+            show_page(12);
+            document.getElementById('master_popup').style.display = 'none';
             break;
 
     }    
@@ -3227,6 +3341,7 @@ function compiled_read_scenario(num){
             enable_play_buttons();
             show_layer(2);
             show_read_page(17);
+            document.getElementById('master_popup').style.display = 'none';
     }
 }
 
@@ -3296,6 +3411,7 @@ enable_btn.onclick = function update(){
 enable_set_2.onclick = function update(){
     clear_all();
     show_read_page(0);
+    scene = 1;
     scene_num = 10;
     compiled_enable_scenario(scene_num);
 }
@@ -3303,6 +3419,7 @@ enable_set_2.onclick = function update(){
 enable_set_3.onclick = function update(){
     clear_all();
     show_read_page(0);
+    scene = 1;
     scene_num = 17;
     compiled_enable_scenario(scene_num);
 }
@@ -3323,6 +3440,7 @@ read_btn.onclick = function update(){
 read_set_2.onclick = function update(){
     clear_all();
     show_page(0);
+    scene = 2;
     scene_num = 10;
     compiled_read_scenario(scene_num);
 }
@@ -3330,6 +3448,7 @@ read_set_2.onclick = function update(){
 read_set_3.onclick = function update(){
     clear_all();
     show_page(0);
+    scene = 2;
     scene_num = 19;
     compiled_read_scenario(scene_num);
 }
@@ -3337,6 +3456,7 @@ read_set_3.onclick = function update(){
 read_set_4.onclick = function update(){
     clear_all();
     show_page(0);
+    scene = 2;
     scene_num = 28;
     compiled_read_scenario(scene_num);
 }
@@ -3344,7 +3464,10 @@ read_set_4.onclick = function update(){
 
 prev_btn.onclick = function update(){
     if(flag[0] == 0) {
-        scene_num--;
+        if( scene_num >= 1){
+            scene_num--;
+        }
+        clear_all();
         scene_num_1.content = scene_num;
         testing.content = scene_num;
         if(scene == 1) {
@@ -3356,7 +3479,9 @@ prev_btn.onclick = function update(){
     }
 }
 next_btn.onclick = function update(){
+    message_text.visible = true;
     if(flag[0] == 0) {
+        clear_all();
         scene_num++;
         scene_num_1.content = scene_num;
         testing.content = scene_num;
@@ -3371,11 +3496,43 @@ next_btn.onclick = function update(){
 
 play_btn.onclick = function update(){
     if(flag[0] == 0 && scene == 1) {
+        clear_all();
         compiled_enable_scenario(scene_num);
     }
     if(flag[0] == 0 && scene == 2) {
+        clear_all();
         compiled_read_scenario(scene_num);
     }
+}
+
+function show_overlay(){
+    document.getElementById('instructions_overlay').style.display = 'block';
+    instruction_overlay.visible = true;   
+}
+function hide_overlay(){
+    document.getElementById('instructions_overlay').style.display = 'none';
+    instruction_overlay.visible = false;  
+}   
+hide_overlay();
+close_instructions.onclick = function update(){
+    hide_overlay();
+}
+
+close_prior.onclick = function update(){
+    document.getElementById('first_survey').style.display = 'none';   
+    show_overlay();  
+}
+
+show_instruction.onclick = function update(){
+    show_overlay();  
+}
+
+feedback.onclick = function update(){
+    document.getElementById('last_survey').style.display = 'block';  
+}
+
+close_feedback.onclick = function update(){
+    document.getElementById('last_survey').style.display = 'none';   
 }
 
 function disable_play_buttons(){
@@ -3383,7 +3540,7 @@ function disable_play_buttons(){
     document.getElementById('next_btn').disabled = true;
     document.getElementById('play_btn').disabled = true;
 }
-
+disable_play_buttons();
 function enable_play_buttons(){
     if(scene_num == 0) {
         document.getElementById('prev_btn').disabled = true;
