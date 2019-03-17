@@ -3240,6 +3240,7 @@ function clear_all(){
     clear_control();
     show_en_diagram(0);
     show_read_diagram(0);
+    clearboxes();
 }
 
 var scene_num = 0;
