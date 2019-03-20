@@ -770,64 +770,67 @@ function move_waveform(destination, group){
     view.on('frame', framehandler);
 }
 
-function move_to_position(path1, object, group){
-    disable_play_buttons();
+function move_to_position(path1, object, group){ //Removed moving animation, item just appears in position
+    // disable_play_buttons();
     var final = path1.getPointAt(0)- new Point(0,30);
-    group.visible = false;
-    object.visible = true;
-    flag[0] = 1;
-    var offset = 0;
-    offset1 = 0;
-    var path = new Path();
-    path.add(object.position);
-    path.add(final);
-    var framehandler = function(event){
-        if(offset < path.length) {
-            object.position = path.getPointAt(offset);
-            offset+=speed;
-            progress_bar.dashArray = [offset1, 1000];
-            offset1+= progress_bar.length / (path.length/speed);
-        } else {
-            object.visible = false;
-            object.position = path.getPointAt(0);
-            group.position = final + new Point(0,21);
-            group.visible = true;
-            flag[0] = 0;
-            progress_bar.dashArray = [1000, 1000];
-            enable_play_buttons();
-            view.off('frame', framehandler)
-        }
-    }
-    view.on('frame', framehandler);
+    // group.visible = false;
+    // var clone = object.clone();
+    // flag[0] = 1;
+    // var offset = 0;
+    // offset1 = 0;
+    // var path = new Path();
+    // path.add(object.position);
+    // path.add(final);
+    // var framehandler = function(event){
+    //     if(offset < path.length) {
+    //         clone.position = path.getPointAt(offset);
+    //         offset+=speed;
+    //         progress_bar.dashArray = [offset1, 1000];
+    //         offset1+= progress_bar.length / (path.length/speed);
+    //     } else {
+    //         clone.remove();
+    //         group.position = final + new Point(0,21);
+    //         group.visible = true;
+    //         flag[0] = 0;
+    //         progress_bar.dashArray = [1000, 1000];
+    //         enable_play_buttons();
+    //         view.off('frame', framehandler)
+    //     }
+    // }
+    // view.on('frame', framehandler);
+    group.position = final + new Point(0,21);
+    group.visible = true;
 }
 
-function move_to_position_2(path1, object, group){
-    disable_play_buttons();
+function move_to_position_2(path1, object, group){ //removed moving animations, item just appears in place
+    // disable_play_buttons();
+    // var clone = object.clone();
     final = path1.getPointAt(path1.length)-new Point(0, 30);
-    flag[0] = 1;
-    var offset = 0;
-    var offset1 = 0;
-    var path = new Path();
-    path.add(object.position);
-    path.add(final);
-    var framehandler = function(event){
-        if(offset < path.length) {
-            object.position = path.getPointAt(offset);
-            offset+=speed;
-            progress_bar.dashArray = [offset1, 1000];
-            offset1+= progress_bar.length / (path.length/speed);
-        } else {
-            object.visible = false;
-            object.position = path.getPointAt(0);
-            group.position = final + new Point(0,21);
-            group.visible = true;
-            flag[0] = 0;
-            progress_bar.dashArray = [1000, 1000];
-            enable_play_buttons();
-            view.off('frame', framehandler)
-        }
-    }
-    view.on('frame', framehandler);
+    // flag[0] = 1;
+    // var offset = 0;
+    // var offset1 = 0;
+    // var path = new Path();
+    // path.add(object.position);
+    // path.add(final);
+    // var framehandler = function(event){
+    //     if(offset < path.length) {
+    //         clone.position = path.getPointAt(offset);
+    //         offset+=speed;
+    //         progress_bar.dashArray = [offset1, 1000];
+    //         offset1+= progress_bar.length / (path.length/speed);
+    //     } else {
+    //         clone.remove();
+    //         group.position = final + new Point(0,21);
+    //         group.visible = true;
+    //         flag[0] = 0;
+    //         progress_bar.dashArray = [1000, 1000];
+    //         enable_play_buttons();
+    //         view.off('frame', framehandler)
+    //     }
+    // }
+    // view.on('frame', framehandler);
+    group.position = final + new Point(0,21);
+    group.visible = true;
 }
 
 function draw_new_wave(group){
@@ -1137,6 +1140,7 @@ draw_data_box(0, set_3, coordinate_1, '10000000', nth, 0);
 draw_ack_box(1, set_3, 0, coordinate_1, 0);
 draw_stop_box(0, set_3, coordinate_1, 0);
 en_diagram.addChild(set_3);
+
 
 function show_en_diagram(num){
     switch(num){
@@ -1864,12 +1868,28 @@ value_item.addChild(text);
 value_item.addChild(circle);
 value_item.visible = false;
 
+var single_signal = new Group();
+var rect = new Path.Rectangle(new Point(18+31,9), new Size(15,15));
+rect.strokeColor = 'black';
+var text = rw.clone();
+var circle = circle.clone();
+circle.position+= new Point(16,0);
+single_signal.addChildren([rect, text, circle]);
+single_signal.visible = false;
+
+
 var prop_clones = new Group();
 for(var i = 0; i < 5; i++){
     clone = value_item.clone();
     prop_clones.addChild(clone);
 }
 
+var signal_clones = new Group();
+for(var i = 0; i < 5; i++){
+    clone = single_signal.clone();
+    signal_clones.addChild(clone);
+}
+signal_clones.visible = false;
 
 function change_value_item(text, rw){
     value_item.children[1].content = rw;
@@ -1881,6 +1901,13 @@ function change_value_item(text, rw){
         prop_clones.children[i].children[1].content = rw;
     }
 }
+function change_signal_item(rw){
+    single_signal.children[1].content = rw;
+    for(var i = 0; i < 5; i++){
+        signal_clones.children[i].children[1].content = rw;
+    }
+}
+
 
 
 prop_clones.visible = false;
@@ -1900,12 +1927,12 @@ function propagatefrom(path1, object, group, num) {
             progress_bar.dashArray = [offset3, 1000];
             offset3+= progress_bar.length*(path1.length/total_length)/(path1.length/(speed/2));
         } else {
-            prop_clones.visible = true;
+            group.visible = true;
             object.visible = false;
             progress_bar.dashArray = [offset3, 1000];
             offset3+= progress_bar.length*(right_path.children[4].length/total_length)/(right_path.children[4].length/(speed/2));
             for(var i = 0; i<5; i++){
-                prop_clones.children[i].visible = true;
+                group.children[i].visible = true;
             }
             if(offset2<right_path.children[0].length){
                 group.children[0].position =right_path.children[0].getPointAt(offset2)+ new Point(0,-9);
@@ -2120,31 +2147,31 @@ function transmit(first, second, num, reg_address, reg_value){
     slavegreen(second);
     movealong2paths(left_path.children[4-first], right_path.children[second], value_item, num, reg_address, reg_value);
 }
-function transmit_no_change(first, second, num){
+function transmit_no_change(first, second, num, object){
     trafficgreen(first);
     slavegreen(second);
-    movealong2paths_no_change(left_path.children[4-first], right_path.children[second], value_item, num);
+    movealong2paths_no_change(left_path.children[4-first], right_path.children[second], object, num);
 }
 function transmit_stop(first, second, num, reg_address, reg_value){
     trafficgreen(first);
     slavegreen(second);
-    stop_bit(left_path.children[4-first], right_path.children[second], value_item, num, reg_address, reg_value);
+    stop_bit(left_path.children[4-first], right_path.children[second], single_signal, num, reg_address, reg_value);
 }
-function rtransmit(first, second, num){
+function rtransmit(first, second, num, object){
     trafficgreen(first);
     slavegreen(second);
-    reversealong2paths(right_path.children[second], left_path.children[4-first], value_item, num);
+    reversealong2paths(right_path.children[second], left_path.children[4-first], object, num);
 }
-function propagate(first, num){
+function propagate(first, num, object, group){
     trafficgreen(first);
     allslaves.strokeColor = 'green';
-    propagatefrom(left_path.children[4-first], value_item, prop_clones, num);
+    propagatefrom(left_path.children[4-first], object, group, num);
 }
 
 function write_slave_address(RW, reg_address, reg_value){
     address = '0x44';
     change_value_item(address, RW)
-    propagate(2, 1);
+    propagate(2, 1, value_item, prop_clones);
     regaddress.children[2].content = reg_address;
     regvalue.children[2].content = reg_value;
 }
@@ -2152,29 +2179,27 @@ function slave_acknowledge(){
     light_up(0);
     address = '';
     read = 'A';
-    change_value_item(address, read);
-    rtransmit(2, 4, 0);
+    change_signal_item(read);
+    rtransmit(2, 4, 0, single_signal);
 }
 function slave_nacknowledge(){
     light_up(0);
     address = '';
     read = 'Ā';
     change_value_item(address, read);
-    rtransmit(2, 4, 0);
+    rtransmit(2, 4, 0, single_signal);
 }
 function master_acknowledge(){
     light_up(0);
-    address = '';
     read = 'A';
-    change_value_item(address, read);
-    transmit_no_change(2, 4, 0);
+    change_signal_item(read);
+    transmit_no_change(2, 4, 0, single_signal);
 }
 function master_nacknowledge(){
     light_up(0);
-    address = '';
     read = 'Ā';
-    change_value_item(address, read);
-    transmit_no_change(2, 4, 0);
+    change_signal_item(read);
+    transmit_no_change(2, 4, 0, single_signal);
 }
 function write_slave_reg_address(reg_address, reg_value){
     transmit(2, 4, 2, reg_address, reg_value);
@@ -2192,26 +2217,23 @@ function read_slave_value(value, reg_address, reg_value){
     light_up(3);
     regaddress.children[2].content = reg_address;
     regvalue.children[2].content = reg_value;
-    rtransmit(2, 4, 3)
+    rtransmit(2, 4, 3, value_item);
 }
 function start_scene(){
-    address = '';
     read = 'S';
-    change_value_item(address, read);
+    change_signal_item(read);
     reg_address = '';
     reg_value = '';
-    propagate(2, 0);
+    propagate(2, 0, single_signal, signal_clones);
 }
 function complete_stop(){
-    address = '';
     read = 'P';
-    change_value_item(address, read);
+    change_signal_item(read);
     transmit_stop(2, 4, 0, nth, nth);
 }
 function stop_scene(reg_address, reg_value){
-    address = '';
     read = 'P';
-    change_value_item(address, read);
+    change_signal_item(read);
     transmit_stop(2, 4, 0, reg_address, reg_value);
 }
 var scene_num_1 = new PointText(new Point(200, 40));
@@ -2332,7 +2354,7 @@ text.strokeColor = 'red';
 text.fontSize = 15;
 text.content = 'Controls and Progress Bar';
 instruction_overlay.addChild(text);
-var box = new Path.Rectangle(new Point(880,30), new Size(390, 300));
+var box = new Path.Rectangle(new Point(880,30), new Size(390, 242));
 box.strokeColor = 'red';
 instruction_overlay.addChild(box);
 var instruction_text = text.clone();
@@ -2390,36 +2412,36 @@ message_text.visible = false;
 
 //test funtion for hover text box (needs to be styled by css)
 
-function move_to_position(path1, object, group){
-    disable_play_buttons();
-    var final = path1.getPointAt(0)- new Point(0,30);
-    group.visible = false;
-    object.visible = true;
-    flag[0] = 1;
-    var offset = 0;
-    offset1 = 0;
-    var path = new Path();
-    path.add(object.position);
-    path.add(final);
-    var framehandler = function(event){
-        if(offset < path.length) {
-            object.position = path.getPointAt(offset);
-            offset+=speed;
-            progress_bar.dashArray = [offset1, 1000];
-            offset1+= progress_bar.length / (path.length/speed);
-        } else {
-            object.visible = false;
-            object.position = path.getPointAt(0);
-            group.position = final + new Point(0,21);
-            group.visible = true;
-            flag[0] = 0;
-            progress_bar.dashArray = [1000, 1000];
-            enable_play_buttons();
-            view.off('frame', framehandler)
-        }
-    }
-    view.on('frame', framehandler);
-}
+// function move_to_position(path1, object, group){
+//     disable_play_buttons();
+//     var clone = object.clone();
+//     var final = path1.getPointAt(0)- new Point(0,30);
+//     group.visible = false;
+//     object.visible = true;
+//     flag[0] = 1;
+//     var offset = 0;
+//     offset1 = 0;
+//     var path = new Path();
+//     path.add(object.position);
+//     path.add(final);
+//     var framehandler = function(event){
+//         if(offset < path.length) {
+//             clone.position = path.getPointAt(offset);
+//             offset+=speed;
+//             progress_bar.dashArray = [offset1, 1000];
+//             offset1+= progress_bar.length / (path.length/speed);
+//         } else {
+//             clone.remove();
+//             group.position = final + new Point(0,21);
+//             group.visible = true;
+//             flag[0] = 0;
+//             progress_bar.dashArray = [1000, 1000];
+//             enable_play_buttons();
+//             view.off('frame', framehandler)
+//         }
+//     }
+//     view.on('frame', framehandler);
+// }
 var message_flag = 0;
 
 var display_message = function(){
@@ -2512,7 +2534,7 @@ add_page(pages, '3 This series of communications can be represented as such, in 
 //4
 add_page(pages, '4 The diagram shows a 5 different master devices represented by blue circles, and 5 different slave devices represented by the yellow circles. As I2C is a half-duplex, serial communication, only one device can transmit at any point in time. Furthermore, there is collision detection and arbitration to allow for multiple masters. At any point when one master is communicating, no other masters will be able to communicate, this is represented by the traffic light which will show which master is communicating while the others are forced to stop. This diagram will show how each segment of the waveform shown earlier is transmitted.');
 //5
-add_page(pages, '5 First, the start condition is given by the master to the bus, and all slaves will start listening to the bus. As I2C communication is half-duplex, only one device can transmit at any time, in this way it is somewhat like having a conversation where each party has to affirm that they have received a message. Click the Show Message button below to see a representation of a conversation between the master and slave as each bit is sent across.');
+add_page(pages, '5 First, the start condition is given by the master to the bus, and all slaves will start listening to the bus. As I2C communication is half-duplex, only one device can transmit at any time, in this way it is somewhat like having a conversation where each party has to affirm that they have received a message. The chat window below shows a conversation between the master and slave as each bit is sent across.');
 //6
 add_page(pages, '6 The master will now propagate the slave address it wants to communicate with onto the bus, for this demonstration, our top most slave is the LSB sensor with the Slave Address 0x44.');
 //7
@@ -2537,7 +2559,7 @@ add_page(read_pages, "3 This series of communications can be presented as such, 
 //4
 add_page(read_pages, "4 We will now proceed to view how each part of the signal is transmitted by the master/slave. To the left you can see a number of masters represented by the light blue circles, while slaves are represented by the yellow circles. As I2C is a half-duplex, serial communication, only one device can transmit at any point in time. Furthermore, there is collision detection and arbitration to allow for multiple masters. At any point when one master is communicating, no other masters will be able to communicate, this is represented by the traffic light which will show which master is communicating while the others are forced to stop.");
 //5
-add_page(read_pages, "5 The start condition is given by the master to the bus, and all slaves start listening to the bus. As I2C communication is half-duplex, only one device can transmit at any time, in this way it is somewhat like having a conversation where each party has to affirm that they have received a message. Click the Show Message button below to see a representation of a conversation between the master and slave as each bit is sent across.");
+add_page(read_pages, "5 The start condition is given by the master to the bus, and all slaves start listening to the bus. As I2C communication is half-duplex, only one device can transmit at any time, in this way it is somewhat like having a conversation where each party has to affirm that they have received a message. The chat window below shows a representation of a conversation between the master and slave as each bit is sent across.");
 //6
 add_page(read_pages, '6 The master will now propagate the slave address it wants to communicate with onto the bus followed by a write bit, for this demonstration, our top most slave is the LSB sensor with the Slave Address 0x44.');
 //7
@@ -2732,6 +2754,16 @@ function clear_messages(){
     $(".chat-message-list").empty();
 }
 
+function feedback_button_glow(){
+    $('#feedback').addClass('glowing');
+    document.getElementById('feedback').style.color = 'white';
+}
+function feedback_button_not_glowing(){
+    $('#feedback').removeClass('glowing');
+    document.getElementById('feedback').style.color = 'gray';
+}
+
+
 var path = new Rectangle(new Point(500,400), new Size(50,50));
 var box = new Path.Rectangle(path);
 box_diagram = en_diagram.clone();
@@ -2788,41 +2820,79 @@ function show_read_box_diagram(num){
 }
 
 
-function show_box_children(group, num){
-    switch(num){
-        case 0:
-            for(var i = 0; i<group.children.length; i++){
-                group.children[i].visible = true;
+function show_box_children(group, num){ 
+    for(var i = 0; i< group.children.length; i++){
+        if(i == num){
+            group.children[i].opacity = 1;
+            if(group.children[i].children.length == 3) {
+                group.children[i].children[0].strokeColor = 'darkgreen';
+                group.children[i].children[0].strokeWidth = 3;
+                group.children[i].children[1].fillColor = 'black';
+                group.children[i].children[2].fillColor = 'black';
+            } else if(group.children[i].children.length == 2){
+                group.children[i].children[0].children[0].strokeColor = 'darkgreen';
+                group.children[i].children[0].children[0].strokeWidth = 3;
+                group.children[i].children[0].children[1].fillColor = 'black';
+                group.children[i].children[0].children[2].fillColor = 'black';
+                group.children[i].children[1].children[0].strokeColor = 'darkgreen';
+                group.children[i].children[1].children[0].strokeWidth = 3;
+                group.children[i].children[1].children[1].fillColor = 'black';
+                group.children[i].children[1].children[2].fillColor = 'black';
             }
-            break;
-        case 1:
-            for(var i = 0; i<group.children.length; i++){
-                if( i >= 1) {
-                    group.children[i].visible = true;
-                } else {
-                    group.children[i].visible = false;
-                }
-            }
-            break;
-        case 2:
-            for(var i = 0; i<group.children.length; i++){
-                if( i >= 2) {
-                    group.children[i].visible = true;
-                } else {
-                    group.children[i].visible = false;
-                }
-            }
-            break;
-        case 3:
-            for(var i = 0; i<group.children.length; i++){
-                if( i >= 3) {
-                    group.children[i].visible = true;
-                } else {
-                    group.children[i].visible = false;
-                }
-            }
-            break;
+        }
+        else {
+            group.children[i].opacity = 0.5;
+            if(group.children[i].children.length == 3) {
+                group.children[i].children[0].strokeColor = 'black';
+                group.children[i].children[0].strokeWidth = 1;
+                group.children[i].children[1].fillColor = 'black';
+                group.children[i].children[2].fillColor = 'black';
+            } else if(group.children[i].children.length == 2){
+                group.children[i].children[0].children[0].strokeColor = 'black';
+                group.children[i].children[0].children[0].strokeWidth = 1;
+                group.children[i].children[0].children[1].fillColor = 'black';
+                group.children[i].children[0].children[2].fillColor = 'black';
+                group.children[i].children[1].children[0].strokeColor = 'black';
+                group.children[i].children[1].children[0].strokeWidth = 1;
+                group.children[i].children[1].children[1].fillColor = 'black';
+                group.children[i].children[1].children[2].fillColor = 'black';
+            }    
+        }
     }
+    // switch(num){
+    //     case 0:
+    //         for(var i = 0; i<group.children.length; i++){
+    //             group.children[i].visible = true;
+    //         }
+    //         break;
+    //     case 1:
+    //         for(var i = 0; i<group.children.length; i++){
+    //             if( i >= 1) {
+    //                 group.children[i].visible = true;
+    //             } else {
+    //                 group.children[i].visible = false;
+    //             }
+    //         }
+    //         break;
+    //     case 2:
+    //         for(var i = 0; i<group.children.length; i++){
+    //             if( i >= 2) {
+    //                 group.children[i].visible = true;
+    //             } else {
+    //                 group.children[i].visible = false;
+    //             }
+    //         }
+    //         break;
+    //     case 3:
+    //         for(var i = 0; i<group.children.length; i++){
+    //             if( i >= 3) {
+    //                 group.children[i].visible = true;
+    //             } else {
+    //                 group.children[i].visible = false;
+    //             }
+    //         }
+    //         break;
+    // }
 }
 
 function compiled_enable_scenario(num){
@@ -2844,30 +2914,30 @@ function compiled_enable_scenario(num){
         case 3:
             show_layer(2);
             show_box_diagram(0);     
-            show_box_children(box_diagram.children[0], 0);   
+            show_box_children(box_diagram.children[0], 99);   
             show_page(4);
             break;      
         case 4:
             show_layer(2);
             all_red();
-            change_value_item('', 'S');
+            change_signal_item('S');
             show_box_diagram(0);
             show_box_children(box_diagram.children[0], 0);
-            move_to_position(left_path.children[2], box_diagram.children[0].children[0], value_item);
+            move_to_position(left_path.children[2], box_diagram.children[0].children[0], single_signal);
             show_page(5);
             break;  
         case 5:
             show_layer(2);
             enable_scenario_2(0);
             show_box_diagram(0);
-            show_box_children(box_diagram.children[0], 1);
+            show_box_children(box_diagram.children[0], 0);
             // add_message(chatMessages[0]);
             add_message_mass(chatMessages, 0);
             show_page(5);
             break; 
         case 6:
             // temp_stop_2();
-            show_layer(2);
+            show_layer(2);  
             change_value_item('0x44', 'W');
             show_box_diagram(0);
             show_box_children(box_diagram.children[0], 1);
@@ -2879,7 +2949,7 @@ function compiled_enable_scenario(num){
             show_layer(2);
             enable_scenario_2(1);
             show_box_diagram(0);
-            show_box_children(box_diagram.children[0], 2);
+            show_box_children(box_diagram.children[0], 1);
             // add_message(chatMessages[1]);
             add_message_mass(chatMessages, 1);
             show_page(6);
@@ -2887,10 +2957,10 @@ function compiled_enable_scenario(num){
         case 8:
             // temp_stop_2();
             show_layer(2);
-            change_value_item('', 'A');
+            change_signal_item('A');
             show_box_diagram(0);
             show_box_children(box_diagram.children[0], 2);
-            move_to_position_2(right_path.children[4], box_diagram.children[0].children[2], value_item);
+            move_to_position_2(right_path.children[4], box_diagram.children[0].children[2], single_signal);
             add_message_mass_no_wait(chatMessages, 1);
             show_page(7);
             break; 
@@ -2898,7 +2968,7 @@ function compiled_enable_scenario(num){
             show_layer(2);
             enable_scenario_2(2);
             show_box_diagram(0);
-            show_box_children(box_diagram.children[0], 3);
+            show_box_children(box_diagram.children[0], 2);
             // add_message(chatMessages[2]);
             add_message_mass(chatMessages, 2);
             show_page(7);
@@ -2920,7 +2990,7 @@ function compiled_enable_scenario(num){
             show_layer(2);
             add_message_mass_no_wait(chatMessages, 2);
             show_box_diagram(1);
-            show_box_children(box_diagram.children[1], 0);
+            show_box_children(box_diagram.children[1], 99);
             show_page(9);
             break;
         case 13: 
@@ -2937,7 +3007,7 @@ function compiled_enable_scenario(num){
             show_layer(2);   
             enable_scenario_2(3);
             show_box_diagram(1);
-            show_box_children(box_diagram.children[1], 1);
+            show_box_children(box_diagram.children[1], 0);
             // add_message(chatMessages[3]);
             add_message_mass(chatMessages, 3);
             show_page(9);
@@ -2946,17 +3016,17 @@ function compiled_enable_scenario(num){
             // temp_stop_2();
             show_layer(2);
             add_message_mass_no_wait(chatMessages, 3);
-            change_value_item('', 'A');
+            change_signal_item('A');
             show_box_diagram(1);
             show_box_children(box_diagram.children[1], 1);
-            move_to_position_2(right_path.children[4], box_diagram.children[1].children[1], value_item);
+            move_to_position_2(right_path.children[4], box_diagram.children[1].children[1], single_signal);
             show_page(9);
             break;
         case 16:
             show_layer(2);
             enable_scenario_2(4);
             show_box_diagram(1);
-            show_box_children(box_diagram.children[1], 2);
+            show_box_children(box_diagram.children[1], 1);
             // add_message(chatMessages[4]);
             add_message_mass(chatMessages, 4);
             show_page(9);
@@ -2977,7 +3047,7 @@ function compiled_enable_scenario(num){
             show_layer(2);
             add_message_mass_no_wait(chatMessages, 4);
             show_box_diagram(2);
-            show_box_children(box_diagram.children[2], 0);
+            show_box_children(box_diagram.children[2], 99);
             show_page(11);
             break;
         case 20:
@@ -2994,7 +3064,7 @@ function compiled_enable_scenario(num){
             show_layer(2);
             enable_scenario_2(5);
             show_box_diagram(2);
-            show_box_children(box_diagram.children[2], 1);
+            show_box_children(box_diagram.children[2], 0);
             // add_message(chatMessages[5]);
             add_message_mass(chatMessages, 5);
             show_page(11);
@@ -3005,15 +3075,15 @@ function compiled_enable_scenario(num){
             add_message_mass_no_wait(chatMessages, 5);
             show_box_diagram(2);
             show_box_children(box_diagram.children[2], 1);
-            change_value_item('', 'A');
-            move_to_position_2(right_path.children[4], box_diagram.children[2].children[1], value_item);
+            change_signal_item('A');
+            move_to_position_2(right_path.children[4], box_diagram.children[2].children[1], single_signal);
             show_page(11);
             break;
         case 23:
             show_layer(2);
             enable_scenario_2(6);
             show_box_diagram(2);
-            show_box_children(box_diagram.children[2], 2);
+            show_box_children(box_diagram.children[2], 1);
             // add_message(chatMessages[6]);
             add_message_mass(chatMessages, 6);
             show_page(11);
@@ -3024,19 +3094,19 @@ function compiled_enable_scenario(num){
             add_message_mass_no_wait(chatMessages, 6);
             show_box_diagram(2);
             show_box_children(box_diagram.children[2], 2);
-            change_value_item('', 'P');
-            move_to_position(left_path.children[2], box_diagram.children[2].children[2], value_item);
+            change_signal_item('P');
+            move_to_position(left_path.children[2], box_diagram.children[2].children[2], single_signal);
             show_page(11);
             break;
         case 25:
             show_layer(2);
             enable_scenario_2(7);
             show_box_diagram(2);
-            show_box_children(box_diagram.children[2], 3);
+            show_box_children(box_diagram.children[2], 2);
             // add_message(chatMessages[7]);
             add_message_mass(chatMessages, 7);
             show_page(12);
-            document.getElementById('master_popup').style.display = 'none';
+            feedback_button_glow();
             break;
 
     }    
@@ -3060,22 +3130,22 @@ function compiled_read_scenario(num){
         case 3:
             show_layer(2);
             show_read_box_diagram(0);
-            show_box_children(read_box_diagram.children[0], 0);
+            show_box_children(read_box_diagram.children[0], 99);
             show_read_page(4);
             break;
         case 4:
             show_layer(2);
             all_red();
-            change_value_item('', 'S');
+            change_signal_item('S');
             show_read_box_diagram(0);
             show_box_children(read_box_diagram.children[0], 0);
-            move_to_position(left_path.children[2], read_box_diagram.children[0].children[0], value_item);
+            move_to_position(left_path.children[2], read_box_diagram.children[0].children[0], single_signal);
             show_read_page(5);
             break;
         case 5:
             show_layer(2);
             show_read_box_diagram(0);
-            show_box_children(read_box_diagram.children[0], 1);
+            show_box_children(read_box_diagram.children[0], 0);
             read_scenario_2(0);
             show_read_page(5);
             add_message_mass(r_chatMessages, 0);
@@ -3094,7 +3164,7 @@ function compiled_read_scenario(num){
             show_layer(2);
             add_message_mass(r_chatMessages, 1);
             show_read_box_diagram(0);
-            show_box_children(read_box_diagram.children[0], 2);
+            show_box_children(read_box_diagram.children[0], 1);
             read_scenario_2(1);
             show_read_page(6);
             break;
@@ -3104,15 +3174,15 @@ function compiled_read_scenario(num){
             add_message_mass_no_wait(r_chatMessages, 1);
             show_read_box_diagram(0);
             show_box_children(read_box_diagram.children[0], 2);
-            change_value_item('', 'A');
-            move_to_position_2(right_path.children[4], read_box_diagram.children[0].children[2], value_item);
+            change_signal_item('A');
+            move_to_position_2(right_path.children[4], read_box_diagram.children[0].children[2], single_signal);
             show_read_page(7);
             break;
         case 9:
             show_layer(2);
             add_message_mass(r_chatMessages, 2);
             show_read_box_diagram(0);
-            show_box_children(read_box_diagram.children[0], 3);
+            show_box_children(read_box_diagram.children[0], 2);
             read_scenario_2(2);
             show_read_page(7);
             break;
@@ -3132,7 +3202,7 @@ function compiled_read_scenario(num){
             show_layer(2);
             add_message_mass_no_wait(r_chatMessages, 2);
             show_read_box_diagram(1);
-            show_box_children(read_box_diagram.children[1], 0);
+            show_box_children(read_box_diagram.children[1], 99);
             show_read_page(9);
             break;
         case 13:
@@ -3149,7 +3219,7 @@ function compiled_read_scenario(num){
             show_layer(2);
             add_message_mass(r_chatMessages, 3);
             show_read_box_diagram(1);
-            show_box_children(read_box_diagram.children[1], 1);
+            show_box_children(read_box_diagram.children[1], 0);
             read_scenario_2(3);
             show_read_page(9);
             break;
@@ -3157,17 +3227,17 @@ function compiled_read_scenario(num){
             // temp_stop_2();
             show_layer(2);
             add_message_mass_no_wait(r_chatMessages, 3);
-            change_value_item('', 'A');
+            change_signal_item('A');
             show_read_box_diagram(1);
             show_box_children(read_box_diagram.children[1], 1);
-            move_to_position_2(right_path.children[4], read_box_diagram.children[1].children[1], value_item);
+            move_to_position_2(right_path.children[4], read_box_diagram.children[1].children[1], single_signal);
             show_read_page(9);
             break;
         case 16:
             show_layer(2);
             add_message_mass(r_chatMessages, 4);
             show_read_box_diagram(1);
-            show_box_children(read_box_diagram.children[1], 2);
+            show_box_children(read_box_diagram.children[1], 1);
             read_scenario_2(4);
             show_read_page(9);
             break;
@@ -3175,17 +3245,17 @@ function compiled_read_scenario(num){
             // temp_stop_2();
             show_layer(2);
             add_message_mass_no_wait(r_chatMessages, 4);
-            change_value_item('', 'P');
+            change_signal_item('P');
             show_read_box_diagram(1);
             show_box_children(read_box_diagram.children[1], 2);
-            move_to_position(left_path.children[2], read_box_diagram.children[1].children[2], value_item);
+            move_to_position(left_path.children[2], read_box_diagram.children[1].children[2], single_signal);
             show_read_page(10);
             break;
         case 18:
             show_layer(2);
             add_message_mass(r_chatMessages, 5);
             show_read_box_diagram(1);
-            show_box_children(read_box_diagram.children[1], 3);
+            show_box_children(read_box_diagram.children[1], 2);
             read_scenario_2(5);
             show_read_page(10);
             break;
@@ -3205,24 +3275,24 @@ function compiled_read_scenario(num){
             show_layer(2);
             add_message_mass_no_wait(r_chatMessages, 5);
             show_read_box_diagram(2);
-            show_box_children(read_box_diagram.children[2], 0);
+            show_box_children(read_box_diagram.children[2], 99);
             show_read_page(12);
             break;
         case 22:
             // temp_stop_2();
             show_layer(2);
             add_message_mass_no_wait(r_chatMessages, 5);
-            change_value_item('', 'S');
+            change_signal_item('S');
             show_read_box_diagram(2);
             show_box_children(read_box_diagram.children[2], 0);
-            move_to_position(left_path.children[2], read_box_diagram.children[2].children[0], value_item);
+            move_to_position(left_path.children[2], read_box_diagram.children[2].children[0], single_signal);
             show_read_page(12);
             break;
         case 23:
             show_layer(2);
             add_message_mass(r_chatMessages, 6);
             show_read_box_diagram(2);
-            show_box_children(read_box_diagram.children[2], 1);
+            show_box_children(read_box_diagram.children[2], 0);
             read_scenario_2(6);
             show_read_page(12);
             break;
@@ -3241,7 +3311,7 @@ function compiled_read_scenario(num){
             show_layer(2);
             add_message_mass(r_chatMessages, 7);
             show_read_box_diagram(2);
-            show_box_children(read_box_diagram.children[2], 2);
+            show_box_children(read_box_diagram.children[2], 1);
             read_scenario_2(7);
             show_read_page(12);
             break;
@@ -3249,17 +3319,17 @@ function compiled_read_scenario(num){
             // temp_stop_2();
             show_layer(2);
             add_message_mass_no_wait(r_chatMessages, 7);
-            change_value_item('', 'A');
+            change_signal_item('A');
             show_read_box_diagram(2);
             show_box_children(read_box_diagram.children[2], 2);
-            move_to_position_2(right_path.children[4], read_box_diagram.children[2].children[2], value_item);
+            move_to_position_2(right_path.children[4], read_box_diagram.children[2].children[2], single_signal);
             show_read_page(12);
             break;
         case 27:
             show_layer(2);
             add_message_mass(r_chatMessages, 8);
             show_read_box_diagram(2);
-            show_box_children(read_box_diagram.children[2], 3);
+            show_box_children(read_box_diagram.children[2], 2);
             read_scenario_2(8);
             show_read_page(12);
             break;
@@ -3279,7 +3349,7 @@ function compiled_read_scenario(num){
             show_layer(2);
             add_message_mass_no_wait(r_chatMessages, 8);
             show_read_box_diagram(3);
-            show_box_children(read_box_diagram.children[3], 0);
+            show_box_children(read_box_diagram.children[3], 99);
             show_read_page(14);
             break;
         case 31:
@@ -3296,7 +3366,7 @@ function compiled_read_scenario(num){
             show_layer(2);
             add_message_mass(r_chatMessages, 9);
             show_read_box_diagram(3);
-            show_box_children(read_box_diagram.children[3], 1);
+            show_box_children(read_box_diagram.children[3], 0);
             read_scenario_2(9);
             show_read_page(14);
             break;
@@ -3304,17 +3374,17 @@ function compiled_read_scenario(num){
             // temp_stop_2();
             show_layer(2);
             add_message_mass_no_wait(r_chatMessages, 9);
-            change_value_item('', 'Ā');
+            change_signal_item('Ā');
             show_read_box_diagram(3);
             show_box_children(read_box_diagram.children[3], 1);
-            move_to_position(left_path.children[2], read_box_diagram.children[3].children[1], value_item);
+            move_to_position(left_path.children[2], read_box_diagram.children[3].children[1], single_signal);
             show_read_page(15);
             break;
         case 34:
             show_layer(2);
             add_message_mass(r_chatMessages, 10);
             show_read_box_diagram(3);
-            show_box_children(read_box_diagram.children[3], 2);
+            show_box_children(read_box_diagram.children[3], 1);
             read_scenario_2(10);
             show_read_page(15);
             break;
@@ -3322,17 +3392,17 @@ function compiled_read_scenario(num){
             // temp_stop_2();
             show_layer(2);
             add_message_mass_no_wait(r_chatMessages, 10);
-            change_value_item('', 'P');
+            change_signal_item('P');
             show_read_box_diagram(3);
             show_box_children(read_box_diagram.children[3], 2);
-            move_to_position(left_path.children[2], read_box_diagram.children[3].children[2], value_item);
+            move_to_position(left_path.children[2], read_box_diagram.children[3].children[2], single_signal);
             show_read_page(16);
             break;
         case 36:
             show_layer(2);
             add_message_mass(r_chatMessages, 11);
             show_read_box_diagram(3);
-            show_box_children(read_box_diagram.children[3], 3);
+            show_box_children(read_box_diagram.children[3], 2);
             read_scenario_2(11);
             show_read_page(16);
             break;
@@ -3341,7 +3411,7 @@ function compiled_read_scenario(num){
             enable_play_buttons();
             show_layer(2);
             show_read_page(17);
-            document.getElementById('master_popup').style.display = 'none';
+            feedback_button_glow();
     }
 }
 
@@ -3355,7 +3425,11 @@ function clear_all(){
     clear_control();
     show_en_diagram(0);
     show_read_diagram(0);
+    show_box_diagram(99);
+    show_read_diagram(99);
     clearboxes();
+    all_red();
+    feedback_button_not_glowing();
 }
 
 var scene_num = 0;
@@ -3479,7 +3553,7 @@ prev_btn.onclick = function update(){
     }
 }
 next_btn.onclick = function update(){
-    message_text.visible = true;
+    // message_text.visible = true;
     if(flag[0] == 0) {
         clear_all();
         scene_num++;
@@ -3520,6 +3594,8 @@ close_instructions.onclick = function update(){
 
 close_prior.onclick = function update(){
     document.getElementById('first_survey').style.display = 'none';   
+    document.getElementById('main').style.overflow = 'scroll';
+    document.getElementById('master_popup').style.display = 'block';
     show_overlay();  
 }
 
@@ -3528,11 +3604,14 @@ show_instruction.onclick = function update(){
 }
 
 feedback.onclick = function update(){
-    document.getElementById('last_survey').style.display = 'block';  
+    // document.getElementById('last_survey').style.display = 'block';  
+    // document.getElementById('main').style.overflow = 'hidden';
+    window.open('https://docs.google.com/forms/d/e/1FAIpQLSfsudw44xkbIPprUacfXZVv2Bh7PcKkoNJgQKEm0mIAG4tK3g/viewform?usp=sf_link', '_blank');
 }
 
 close_feedback.onclick = function update(){
-    document.getElementById('last_survey').style.display = 'none';   
+    // document.getElementById('last_survey').style.display = 'none';   
+    // document.getElementById('main').style.overflow = 'scroll';
 }
 
 function disable_play_buttons(){
