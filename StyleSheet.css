@@ -537,17 +537,12 @@ button.glowing{
 #prior_survey{
   position: relative; 
   margin: auto;
-  left: 20%;
   overflow: scroll;
 }
 
 #feedback_survey{
   position: relative; 
   margin: auto;
-  top: 50px; 
-  left: 200px;
-  bottom: 50px; 
-  right: 50px;
   overflow: scroll;
 }
 
@@ -574,7 +569,7 @@ button.glowing{
   position: fixed;
   height: 100px;
   width: 200px;
-  left: 75%;
+  left: 50%;
   bottom: 80%;
 }
 
@@ -582,7 +577,7 @@ button.glowing{
   position: fixed;
   height: 100px;
   width: 200px;
-  left: 75%;
+  left: 50%;
   bottom: 80%;
 }
 
