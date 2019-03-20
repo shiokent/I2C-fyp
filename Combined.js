@@ -3601,7 +3601,7 @@ close_prior.onclick = function update(){
 
 show_instruction.onclick = function update(){
     show_overlay();  
-    document.getElementById('master_popup').style.display = 'hidden';
+    document.getElementById('master_popup').style.display = 'none';
 }
 
 feedback.onclick = function update(){
