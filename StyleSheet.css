@@ -520,7 +520,7 @@ button.glowing{
 }
 
 .overlay {
-  position: absolute; /* Sit on top of the page content */
+  position: fixed; /* Sit on top of the page content */
   margin: auto;
   display: block; /* Hidden by default */
   width: 100%; /* Full width (cover the whole page) */
@@ -571,7 +571,7 @@ button.glowing{
 }
 
 #close_prior{
-  position: absolute;
+  position: fixed;
   height: 100px;
   width: 200px;
   left: 75%;
@@ -579,7 +579,7 @@ button.glowing{
 }
 
 #close_feedback{
-  position: absolute;
+  position: fixed;
   height: 100px;
   width: 200px;
   left: 75%;
