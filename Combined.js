@@ -3590,17 +3590,18 @@ function hide_overlay(){
 hide_overlay();
 close_instructions.onclick = function update(){
     hide_overlay();
+    document.getElementById('master_popup').style.display = 'block';
 }
 
 close_prior.onclick = function update(){
     document.getElementById('first_survey').style.display = 'none';   
     document.getElementById('main').style.overflow = 'scroll';
-    document.getElementById('master_popup').style.display = 'block';
     show_overlay();  
 }
 
 show_instruction.onclick = function update(){
     show_overlay();  
+    document.getElementById('master_popup').style.display = 'hidden';
 }
 
 feedback.onclick = function update(){
