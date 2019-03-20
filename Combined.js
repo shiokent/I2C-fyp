@@ -2338,6 +2338,12 @@ layer1.visible = false;
 
 layer3 = new Layer();
 
+var scenario = new PointText(new Point(50,25));
+scenario.content = '';
+scenario.fontSize = 20;
+scenario.fontWeight = 'bold';
+scenario.fillColor = 'black';
+
 var instruction_overlay = new Group();
 var arrow = new Group();
 var box = new Path.Rectangle(new Point(100,100), new Size(15,45));
@@ -2388,11 +2394,7 @@ progress_bar.add(new Point(750, 500));
 progress_bar.visible = false;
 
 
-var scenario = new PointText(new Point(50,25));
-scenario.content = '';
-scenario.fontSize = 20;
-scenario.fontWeight = 'bold';
-scenario.fillColor = 'black';
+
 
 btn2.onclick = function update(){
     if(speed>1){
