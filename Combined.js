@@ -10,7 +10,7 @@ var tc3 = new Path();
 tc3.strokeColor = 'black';
 var tc4 = new Path();
 tc4.strokeColor = 'black';
-var speed = 2;
+var speed = 3;
 var scene = 0;
 
 initial_destination = new Point(200,350);
