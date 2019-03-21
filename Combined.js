@@ -47,50 +47,6 @@ PointText.prototype.wordwrap=function(max,txt){
     return this.content=lines.join('\n');
 }
 
-var clk_dict = {
-    1: 4,
-    2: 8,
-    3: 12,
-    4: 16,
-    5: 20,
-    6: 24,
-    7: 28,
-    8: 32,
-    9: 36,
-    length: 8
-};
-for(var key in clk_dict) {
-    clk_dict[key]+=2; 
-   }
-var w_dict = {
-    1:4,
-    2:6,
-    3:8,
-    4:10,
-    5:12,
-    6:14,
-    7:16,
-    8:18,
-    9:20,
-    10:40,
-    11:38,
-    12:36,
-    13:34,
-    14:32,
-    16:30,
-    length: 8
-}
-
-//array to contain coordinates of waveform/clock
-var wave_coordinate = { x: [200, 200, 200, 200], y: [160, 100, 150, 100]}
-var w_array = new Array(2);
-for (var i = 0; i < w_array.length; i++) {
-    w_array[i] = new Array(0);
-  }
-var c_array = new Array(2);
-for (var i = 0; i < c_array.length; i++) {
-    c_array[i] = new Array(0);
-  }
 //function to push coordinates into arrays
 function fill(num, x, y) {
     if(num==0){
@@ -102,40 +58,6 @@ function fill(num, x, y) {
         w_array[1].push(y);
      }
 }
-fill(0, wave_coordinate.x[0], wave_coordinate.y[0]);
-fill(1, wave_coordinate.x[1], wave_coordinate.y[1]);
-var digits = [1,1,1,1,1,1,1,1,1];
-var digits1 = [1,1,1,1,1,1,1,1,1];
-
-
-//draw master box
-var x1 = wave_coordinate.x[0];
-var y1 = wave_coordinate.y[0];
-var x2 = wave_coordinate.x[1];
-var y2 = wave_coordinate.y[1];
-var Master = new Rectangle(new Point(50, 55), new Size(150, 150));
-var path = new Path.Rectangle(Master);
-path.fillColor = 'lightblue';
-path.strokeColor = 'black';
-var text_m = new PointText(new Point(125, 135));
-text_m.justification = 'center';
-text_m.fillColor = 'black';
-text_m.content = 'Master';
-text_m.fontSize = '30';
-var text = new PointText(new Point(170, 115));
-text.content = 'SDA';
-var text = new PointText(new Point(170, 175));
-text.content = 'SCL';
-//Draw content box function
-
-
-var height = 20;
-
-var coordinate_1 = { x: [100, 100, 100, 100], y: [100, 100, 100, 100]}
-coordinate_1.x[0] = initial_destination.x;
-coordinate_1.y[0] = initial_destination.y;
-coordinate_1.x[1] = initial_destination.x;
-coordinate_1.y[1] = initial_destination.y;
 
 function drawbox(control, num, coordinate_1, length, group, content, label){
     var tempgroup = new Group();
@@ -164,21 +86,6 @@ function drawbox(control, num, coordinate_1, length, group, content, label){
     coordinate_1.x[num] += length;
 
 }
-var small_box_length = 20;
-var data_box_length = 100;
-var address_box_length = 120;
-
-var diagram1_button = new Group();
-var button_box = new Path.Rectangle(new Point(400, 30), new Size(130,30));
-button_box.strokeColor = 'black';
-button_box.fillColor = 'darkgray';
-// button_box.opacity = 0.3;
-var text = new PointText(new Point(405, 50));
-text.content = 'What is this diagram?';
-text.opacity = 1;
-diagram1_button.addChild(button_box);
-diagram1_button.addChild(text);
-diagram1_button.position += new Point(100, -20);
 
 function draw_start_box(control, group, coordinate, num){
     content = 'S';
@@ -216,8 +123,6 @@ function draw_data_box(control, group, coordinate, data, label, num){
 function draw_address_box(control, group, coordinate, content, label, num){
     drawbox(control, num, coordinate, 120, group, content, label);
 }
-
-
 
 //functions for drawing waveform/clock
 
@@ -288,9 +193,6 @@ function thickendown(coordinate, type){
     fill(type, coordinate.x[type], coordinate.y[type]);
 }
 
-//new layer for creating series of coloured boxes to visualize master/slave control of waveform
-//trying it out via coloured boxes
-var overlay_group = new Group();
 function drawoverlay() {
     var ctl = new Rectangle(new Point(200, 55), new Size(stretch+risedelay+5, 75))
     var ctlbox = new Path.Rectangle(ctl);
@@ -323,9 +225,6 @@ function drawoverlay() {
     last.position += new Point(0, 75);
     overlay_group.addChild(last);
 }
-drawoverlay();  
-
-// overlay_group.selected = true;
 
 function sda_control(type, num){
     for(var i = 0; i<11; i++){
@@ -419,12 +318,6 @@ function clear_control(){
     // overlay_group.children[21].fillColor = 'white';
 }
 
-// Save a reference to the children array in a variable,
-// so we don't end up with very long lines of code:
-// Iterate through the items contained within the array:
-
-
-var all_waves = new Group();
 function draw_wave_end(group){
     draw_number(number_text);
     var clk = new Path();
@@ -728,13 +621,6 @@ function change_waveform(input) {
     }
 }
 
-
-
-testing = new PointText(new Point(50,50));
-testing.content = 0;
-testing.strokeColor = 'black';
-
-
 function move_waveform(destination, group){
     var clone = all_waves.clone();
     clone.visible = true;
@@ -833,9 +719,330 @@ function move_to_position_2(path1, object, group){ //removed moving animations, 
     group.visible = true;
 }
 
-function draw_new_wave(group){
-    group.removeChildren()
+function draw_number(group){
+    var text = new PointText(new Point(275, 95));
+    text.fillColor = 'black';
+    text.content = '0';
+    group.insertChild(0, text);
+    for(i = 1; i<= 8; i++){
+        var text_clone = text.clone();
+        text_clone.position += new Point(i*2*(clocklength+risedelay), 0);
+        group.insertChild(i, text_clone);
+    }
+    group.visible = true;
 }
+function fill_num(input, group){
+    seperate_9(digits1, input);
+    for(i = 0; i<=8; i++){
+        group.children[i].content = digits1[i].toString();
+    }
+}
+
+function seperate(digits, value){
+    num = value;
+    for(var i = 7; i>=0; i--) {
+        digits[i] = num % 10;
+        num = parseInt(num / 10);
+    }
+}
+function seperate_9(digits, value){
+    num = value;
+    for(var i = 8; i>=0; i--) {
+        digits[i] = num % 10;
+        num = parseInt(num / 10);
+    }
+}
+
+function low(segnum, x){
+    var segment = x.segments[0];
+    var original = segment.point.y; 
+    for(var j = 1; j<=2; j++) {
+        segment = x.segments[segnum];
+        segnum++;
+        if(segment.point.y==original) {
+            segment.point.y = segment.point.y + height;
+        } else {
+        }
+    }
+}
+
+function high(segnum, x){
+    var segment = x.segments[0];
+    var original = segment.point.y; 
+    for(var j = 1; j<=2; j++) {
+        segment = x.segments[segnum];
+        segnum++;
+        if(segment.point.y!=original) {
+            segment.point.y = segment.point.y - height;
+        } else {
+        }
+    }
+}
+function show_start(){
+    start_group.visible = true;
+}
+function clearboxes(){
+    ack_group.visible = false;
+    ack_true.visible = false;
+    nack_true.visible = false;
+    read_group.visible = false;
+    read_text.visible = false;
+    write_text.visible = false;
+    start_group.visible = false;
+    stop_group.visible = false;
+}
+
+function read_or_write(input) {
+    read_group.visible = true;
+    length = input.toString().length;
+    var segnum = w_dict[8]
+    if(input == 'w') { 
+        low(segnum, all_waves.children[0].children[1]);
+        write_text.visible = true;
+        read_text.visible = false;
+    } else {
+        if(input =='r') {
+            high(segnum, all_waves.children[0].children[1]);
+            write_text.visible = false;
+            read_text.visible = true;
+        }
+        else {
+            alert("Input invalid");
+        }
+    }
+}
+
+function ack_or_nack(input) {
+    length = input.toString().length;
+    var segnum = w_dict[9]
+    ack_group.visible = true;
+    if(input == 'y') { 
+        low(segnum, all_waves.children[0].children[0]);
+        ack_true.visible = true;
+        nack_true.visible = false;
+    } else {
+        if(input =='n') {
+            high(segnum, all_waves.children[0].children[0]);
+            ack_true.visible = false;
+            nack_true.visible = true;
+        }
+        else {
+            alert("Input invalid");
+        }
+    }
+}
+//Function for acknowledge 
+
+
+function illustrate(group, type, animate){
+    switch(type) {
+        case 0:
+            draw_wave_start(group);
+            slave_group.position = new Point(735, 130);
+            break;
+        case 1:
+            draw_wave_middle(group);
+            slave_group.position = new Point(735, 130);
+            break;
+        case 2:
+            draw_wave_end(group); 
+            slave_group.position = new Point(735+stretch*2-risedelay, 130);
+            break;
+    }
+    if (animate == 1) {
+        animate_draw_wave(all_waves.children[1], all_waves.children[0].children[0], all_waves.children[0].children[1]);
+    }
+    wave_coordinate.x[0] = 200;
+    wave_coordinate.x[1] = 200;
+    wave_coordinate.y[0] = 160;
+    wave_coordinate.y[1] = 100;
+}
+
+function show_en_diagram(num){
+    switch(num){
+        case 0:
+            en_diagram.children[0].visible = false;
+            en_diagram.children[1].visible = false;
+            en_diagram.children[2].visible = false;
+            break;
+        case 1:
+            en_diagram.children[0].visible = true;
+            en_diagram.children[1].visible = false;
+            en_diagram.children[2].visible = false;
+            break;
+        case 2:
+            en_diagram.children[0].visible = true;
+            en_diagram.children[1].visible = true;
+            en_diagram.children[2].visible = false;
+            break;
+        case 3:
+            en_diagram.children[0].visible = true;
+            en_diagram.children[1].visible = true;
+            en_diagram.children[2].visible = true;
+            break;
+    }
+}
+
+function show_read_diagram(num){
+    switch(num){
+        case 0:
+            read_diagram.children[0].visible = false;
+            read_diagram.children[1].visible = false;
+            read_diagram.children[2].visible = false;
+            read_diagram.children[3].visible = false;
+            break;
+        case 1:
+            read_diagram.children[0].visible = true;
+            read_diagram.children[1].visible = false;
+            read_diagram.children[2].visible = false;
+            read_diagram.children[3].visible = false;
+            break;
+        case 2:
+            read_diagram.children[0].visible = true;
+            read_diagram.children[1].visible = true;
+            read_diagram.children[2].visible = false;
+            read_diagram.children[3].visible = false;
+            break;
+        case 3:
+            read_diagram.children[0].visible = true;
+            read_diagram.children[1].visible = true;
+            read_diagram.children[2].visible = true;
+            read_diagram.children[3].visible = false;
+            break;
+        case 4:
+            read_diagram.children[0].visible = true;
+            read_diagram.children[1].visible = true;
+            read_diagram.children[2].visible = true;
+            read_diagram.children[3].visible = true;
+            break;
+    }
+}
+
+var clk_dict = {
+    1: 4,
+    2: 8,
+    3: 12,
+    4: 16,
+    5: 20,
+    6: 24,
+    7: 28,
+    8: 32,
+    9: 36,
+    length: 8
+};
+for(var key in clk_dict) {
+    clk_dict[key]+=2; 
+   }
+var w_dict = {
+    1:4,
+    2:6,
+    3:8,
+    4:10,
+    5:12,
+    6:14,
+    7:16,
+    8:18,
+    9:20,
+    10:40,
+    11:38,
+    12:36,
+    13:34,
+    14:32,
+    16:30,
+    length: 8
+}
+
+//array to contain coordinates of waveform/clock
+var wave_coordinate = { x: [200, 200, 200, 200], y: [160, 100, 150, 100]}
+var w_array = new Array(2);
+for (var i = 0; i < w_array.length; i++) {
+    w_array[i] = new Array(0);
+  }
+var c_array = new Array(2);
+for (var i = 0; i < c_array.length; i++) {
+    c_array[i] = new Array(0);
+  }
+
+fill(0, wave_coordinate.x[0], wave_coordinate.y[0]);
+fill(1, wave_coordinate.x[1], wave_coordinate.y[1]);
+var digits = [1,1,1,1,1,1,1,1,1];
+var digits1 = [1,1,1,1,1,1,1,1,1];
+
+
+//draw master box
+var x1 = wave_coordinate.x[0];
+var y1 = wave_coordinate.y[0];
+var x2 = wave_coordinate.x[1];
+var y2 = wave_coordinate.y[1];
+var Master = new Rectangle(new Point(50, 55), new Size(150, 150));
+var path = new Path.Rectangle(Master);
+path.fillColor = 'lightblue';
+path.strokeColor = 'black';
+var text_m = new PointText(new Point(125, 135));
+text_m.justification = 'center';
+text_m.fillColor = 'black';
+text_m.content = 'Master';
+text_m.fontSize = '30';
+var text = new PointText(new Point(170, 115));
+text.content = 'SDA';
+var text = new PointText(new Point(170, 175));
+text.content = 'SCL';
+//Draw content box function
+
+
+var height = 20;
+
+var coordinate_1 = { x: [100, 100, 100, 100], y: [100, 100, 100, 100]}
+coordinate_1.x[0] = initial_destination.x;
+coordinate_1.y[0] = initial_destination.y;
+coordinate_1.x[1] = initial_destination.x;
+coordinate_1.y[1] = initial_destination.y;
+
+
+var small_box_length = 20;
+var data_box_length = 100;
+var address_box_length = 120;
+
+var diagram1_button = new Group();
+var button_box = new Path.Rectangle(new Point(400, 30), new Size(130,30));
+button_box.strokeColor = 'black';
+button_box.fillColor = 'darkgray';
+// button_box.opacity = 0.3;
+var text = new PointText(new Point(405, 50));
+text.content = 'What is this diagram?';
+text.opacity = 1;
+diagram1_button.addChild(button_box);
+diagram1_button.addChild(text);
+diagram1_button.position += new Point(100, -20);
+
+
+
+
+
+
+
+//new layer for creating series of coloured boxes to visualize master/slave control of waveform
+//trying it out via coloured boxes
+var overlay_group = new Group();
+
+drawoverlay();  
+
+// overlay_group.selected = true;
+
+
+
+
+var all_waves = new Group();
+
+
+
+
+testing = new PointText(new Point(50,50));
+testing.content = 0;
+testing.strokeColor = 'black';
+
+
+
 
 //Slave box
 var slave_group = new Group();
@@ -943,24 +1150,7 @@ stop_group.position += new Point(460, 0);
 stop_group.visible = false;
 
 
-function draw_number(group){
-    var text = new PointText(new Point(275, 95));
-    text.fillColor = 'black';
-    text.content = '0';
-    group.insertChild(0, text);
-    for(i = 1; i<= 8; i++){
-        var text_clone = text.clone();
-        text_clone.position += new Point(i*2*(clocklength+risedelay), 0);
-        group.insertChild(i, text_clone);
-    }
-    group.visible = true;
-}
-function fill_num(input, group){
-    seperate_9(digits1, input);
-    for(i = 0; i<=8; i++){
-        group.children[i].content = digits1[i].toString();
-    }
-}
+
 
 
 //disable for now try to fix touch events
@@ -983,131 +1173,13 @@ function fill_num(input, group){
 //     }
 // }
 
-function seperate(digits, value){
-    num = value;
-    for(var i = 7; i>=0; i--) {
-        digits[i] = num % 10;
-        num = parseInt(num / 10);
-    }
-}
-function seperate_9(digits, value){
-    num = value;
-    for(var i = 8; i>=0; i--) {
-        digits[i] = num % 10;
-        num = parseInt(num / 10);
-    }
-}
 
-function low(segnum, x){
-    var segment = x.segments[0];
-    var original = segment.point.y; 
-    for(var j = 1; j<=2; j++) {
-        segment = x.segments[segnum];
-        segnum++;
-        if(segment.point.y==original) {
-            segment.point.y = segment.point.y + height;
-        } else {
-        }
-    }
-}
-
-function high(segnum, x){
-    var segment = x.segments[0];
-    var original = segment.point.y; 
-    for(var j = 1; j<=2; j++) {
-        segment = x.segments[segnum];
-        segnum++;
-        if(segment.point.y!=original) {
-            segment.point.y = segment.point.y - height;
-        } else {
-        }
-    }
-}
-function show_start(){
-    start_group.visible = true;
-}
-function clearboxes(){
-    ack_group.visible = false;
-    ack_true.visible = false;
-    nack_true.visible = false;
-    read_group.visible = false;
-    read_text.visible = false;
-    write_text.visible = false;
-    start_group.visible = false;
-    stop_group.visible = false;
-}
 
 var boxes_group = new Group();
 boxes_group.addChildren([ack_group, ack_true, nack_true, read_group, read_text, write_text, start_group, stop_group]);
 
 
-function read_or_write(input) {
-    read_group.visible = true;
-    length = input.toString().length;
-    var segnum = w_dict[8]
-    if(input == 'w') { 
-        low(segnum, all_waves.children[0].children[1]);
-        write_text.visible = true;
-        read_text.visible = false;
-    } else {
-        if(input =='r') {
-            high(segnum, all_waves.children[0].children[1]);
-            write_text.visible = false;
-            read_text.visible = true;
-        }
-        else {
-            alert("Input invalid");
-        }
-    }
-}
 
-function ack_or_nack(input) {
-    length = input.toString().length;
-    var segnum = w_dict[9]
-    ack_group.visible = true;
-    if(input == 'y') { 
-        low(segnum, all_waves.children[0].children[0]);
-        ack_true.visible = true;
-        nack_true.visible = false;
-    } else {
-        if(input =='n') {
-            high(segnum, all_waves.children[0].children[0]);
-            ack_true.visible = false;
-            nack_true.visible = true;
-        }
-        else {
-            alert("Input invalid");
-        }
-    }
-}
-//Function for acknowledge 
-
-
-
-
-function illustrate(group, type, animate){
-    switch(type) {
-        case 0:
-            draw_wave_start(group);
-            slave_group.position = new Point(735, 130);
-            break;
-        case 1:
-            draw_wave_middle(group);
-            slave_group.position = new Point(735, 130);
-            break;
-        case 2:
-            draw_wave_end(group); 
-            slave_group.position = new Point(735+stretch*2-risedelay, 130);
-            break;
-    }
-    if (animate == 1) {
-        animate_draw_wave(all_waves.children[1], all_waves.children[0].children[0], all_waves.children[0].children[1]);
-    }
-    wave_coordinate.x[0] = 200;
-    wave_coordinate.x[1] = 200;
-    wave_coordinate.y[0] = 160;
-    wave_coordinate.y[1] = 100;
-}
 
 
 // draw_start_box(coordinate_1);
@@ -1142,30 +1214,7 @@ draw_stop_box(0, set_3, coordinate_1, 0);
 en_diagram.addChild(set_3);
 
 
-function show_en_diagram(num){
-    switch(num){
-        case 0:
-            en_diagram.children[0].visible = false;
-            en_diagram.children[1].visible = false;
-            en_diagram.children[2].visible = false;
-            break;
-        case 1:
-            en_diagram.children[0].visible = true;
-            en_diagram.children[1].visible = false;
-            en_diagram.children[2].visible = false;
-            break;
-        case 2:
-            en_diagram.children[0].visible = true;
-            en_diagram.children[1].visible = true;
-            en_diagram.children[2].visible = false;
-            break;
-        case 3:
-            en_diagram.children[0].visible = true;
-            en_diagram.children[1].visible = true;
-            en_diagram.children[2].visible = true;
-            break;
-    }
-}
+
 show_en_diagram(0);
 
 
@@ -1200,44 +1249,11 @@ draw_ack_box(0, set_7, 1, coordinate_1, 1);
 draw_stop_box(0, set_7, coordinate_1, 1);
 read_diagram.addChild(set_7);
 
-function show_read_diagram(num){
-    switch(num){
-        case 0:
-            read_diagram.children[0].visible = false;
-            read_diagram.children[1].visible = false;
-            read_diagram.children[2].visible = false;
-            read_diagram.children[3].visible = false;
-            break;
-        case 1:
-            read_diagram.children[0].visible = true;
-            read_diagram.children[1].visible = false;
-            read_diagram.children[2].visible = false;
-            read_diagram.children[3].visible = false;
-            break;
-        case 2:
-            read_diagram.children[0].visible = true;
-            read_diagram.children[1].visible = true;
-            read_diagram.children[2].visible = false;
-            read_diagram.children[3].visible = false;
-            break;
-        case 3:
-            read_diagram.children[0].visible = true;
-            read_diagram.children[1].visible = true;
-            read_diagram.children[2].visible = true;
-            read_diagram.children[3].visible = false;
-            break;
-        case 4:
-            read_diagram.children[0].visible = true;
-            read_diagram.children[1].visible = true;
-            read_diagram.children[2].visible = true;
-            read_diagram.children[3].visible = true;
-            break;
-    }
-}
+
 show_read_diagram(0);
 
 
-
+//Switch cases for diagram 1 animation states
 function enable_scenario(num) {
     switch(num){
         case 0:
@@ -1444,7 +1460,8 @@ function read_scenario(num) {
     }
 }
 
-// New layer starts here(second animation)
+// New layer starts here(second animation) -------------------------------------------------------------------------------------------------------------------
+//------------------------------------------------------------------------------------------------------------------------------------------------------------
 var layer2 = new Layer();
 
 var t_height = 60;
@@ -1465,6 +1482,490 @@ var device_array = [0,0];
 var test_array = [0,0];
 var coordinate = { x: [130, 130, 130, 130, 130, 150, 150], y: [80, 160, 240, 320, 400, 80, 240]}
 var coordinate1 = { x: [130, 130, 130, 130, 130], y: [80, 160, 240, 320, 400]}
+
+function light_up(num){
+    for(i = 1; i<4; i++){
+        if(i == num){
+            reg_group.children[i].children[0].fillColor = 'green';
+        } else {
+            reg_group.children[i].children[0].fillColor = 'white';
+        }
+    }
+}
+
+function draw_2(path, coordinate, type){
+    path.add(new Point(coordinate.x[type], coordinate.y[type]));
+}
+function right(coordinate, type) {
+    coordinate.x[type]+= firstline;
+}
+function farright(coordinate, type) {
+    coordinate.x[type]+= secondline;
+}
+function down(coordinate, type) {
+    coordinate.y[type]+= spacing;
+}
+function up(coordinate, type) {
+    coordinate.y[type]-= spacing;
+}
+function trafficgreen(num){
+    for (var i = 0; i<5; i++){
+        if(i == num){
+            collection.children[i].children[3].fillColor= 'green';
+            collection.children[i].children[1].fillColor= 'black';
+            hor1.children[4-i].strokeColor = 'green';
+        } else {
+            collection.children[i].children[1].fillColor= 'red';
+            collection.children[i].children[3].fillColor= 'black';
+            hor1.children[4-i].strokeColor = 'red';
+        }
+    }
+    switch(num) {
+        case '0': case 0:
+            ver1.children[0].strokeColor = 'red';
+            ver1.children[1].strokeColor = 'red';
+            ver1.children[2].strokeColor = 'green';
+            ver1.children[3].strokeColor = 'green';
+            across.strokeColor = 'green';
+            break;  
+        case '1': case 1:
+            ver1.children[0].strokeColor = 'red';
+            ver1.children[1].strokeColor = 'red';
+            ver1.children[2].strokeColor = 'green';
+            ver1.children[3].strokeColor = 'red';
+            across.strokeColor = 'green';
+            break;      
+        case '2': case 2:
+            ver1.children[0].strokeColor = 'red';
+            ver1.children[1].strokeColor = 'red';
+            ver1.children[2].strokeColor = 'red';
+            ver1.children[3].strokeColor = 'red';
+            across.strokeColor = 'green';
+            break;  
+        case '3': case 3:
+            ver1.children[0].strokeColor = 'red';
+            ver1.children[1].strokeColor = 'green';
+            ver1.children[2].strokeColor = 'red';
+            ver1.children[3].strokeColor = 'red';
+            across.strokeColor = 'green';
+            break; 
+        case '4': case 4:
+            ver1.children[0].strokeColor = 'green';
+            ver1.children[1].strokeColor = 'green';
+            ver1.children[2].strokeColor = 'red';
+            ver1.children[3].strokeColor = 'red';
+            across.strokeColor = 'green';
+            break;   
+        case '5': case 5:
+            ver1.children[0].strokeColor = 'red';
+            ver1.children[1].strokeColor = 'red';
+            ver1.children[2].strokeColor = 'red';
+            ver1.children[3].strokeColor = 'red';
+            across.strokeColor = 'red';
+            break;   
+
+    }
+}
+function slavegreen(num){
+    for (var i = 0; i<5; i++){
+        if(i == num){
+            hor2.children[4-i].strokeColor = 'green';
+        } else {
+            hor2.children[4-i].strokeColor = 'red';
+        }
+    }
+    switch(num) {
+        case '0': case 0: 
+            ver2.children[0].strokeColor = 'red';
+            ver2.children[1].strokeColor = 'red';
+            ver2.children[2].strokeColor = 'green';
+            ver2.children[3].strokeColor = 'green';
+            across.strokeColor = 'green';
+            break;  
+        case '1': case 1:
+            ver2.children[0].strokeColor = 'red';
+            ver2.children[1].strokeColor = 'red';
+            ver2.children[2].strokeColor = 'green';
+            ver2.children[3].strokeColor = 'red';
+            across.strokeColor = 'green';
+            break;      
+        case '2': case 2:
+            ver2.children[0].strokeColor = 'red';
+            ver2.children[1].strokeColor = 'red';
+            ver2.children[2].strokeColor = 'red';
+            ver2.children[3].strokeColor = 'red';
+            across.strokeColor = 'green';
+            break;  
+        case '3': case 3:
+            ver2.children[0].strokeColor = 'red';
+            ver2.children[1].strokeColor = 'green';
+            ver2.children[2].strokeColor = 'red';
+            ver2.children[3].strokeColor = 'red';
+            across.strokeColor = 'green';
+            break; 
+        case '4': case 4:
+            ver2.children[0].strokeColor = 'green';
+            ver2.children[1].strokeColor = 'green';
+            ver2.children[2].strokeColor = 'red';
+            ver2.children[3].strokeColor = 'red';
+            across.strokeColor = 'green';
+            break;
+        case '5': case 5:
+            ver2.children[0].strokeColor = 'red';
+            ver2.children[1].strokeColor = 'red';
+            ver2.children[2].strokeColor = 'red';
+            ver2.children[3].strokeColor = 'red';
+            across.strokeColor = 'red';
+            break;          
+    }
+}
+function all_red(){
+    light_up(0);
+    trafficgreen(5);
+    slavegreen(5);  
+}
+
+function change_value_item(text, rw){
+    value_item.children[1].content = rw;
+    for(var i = 0; i < 5; i++){
+        prop_clones.children[i].children[3].content = text;
+    }
+    value_item.children[3].content = text;
+    for(var i = 0; i < 5; i++){
+        prop_clones.children[i].children[1].content = rw;
+    }
+}
+function change_signal_item(rw){
+    single_signal.children[1].content = rw;
+    for(var i = 0; i < 5; i++){
+        signal_clones.children[i].children[1].content = rw;
+    }
+}
+
+function propagatefrom(path1, object, group, num) {
+    disable_play_buttons();
+    object.visible = true;
+    var offset1 = 0;
+    var offset2 = 0;
+    var offset3 = 0;
+    var total_length = path1.length + right_path.children[4].length;
+    flag[0] = 1;
+    var framehandler = function (event) {
+        if (offset1< path1.length){
+            object.position =path1.getPointAt(offset1)+ new Point(0,-9);
+            offset1+=speed/2; // speed - 150px/second
+            progress_bar.dashArray = [offset3, 1000];
+            offset3+= progress_bar.length*(path1.length/total_length)/(path1.length/(speed/2));
+        } else {
+            group.visible = true;
+            object.visible = false;
+            progress_bar.dashArray = [offset3, 1000];
+            offset3+= progress_bar.length*(right_path.children[4].length/total_length)/(right_path.children[4].length/(speed/2));
+            for(var i = 0; i<5; i++){
+                group.children[i].visible = true;
+            }
+            if(offset2<right_path.children[0].length){
+                group.children[0].position =right_path.children[0].getPointAt(offset2)+ new Point(0,-9);
+            } else {
+                group.children[0].visible = false;
+            }
+            if(offset2<right_path.children[1].length){
+                group.children[1].position =right_path.children[1].getPointAt(offset2)+ new Point(0,-9);
+            } else {
+                group.children[1].visible = false;
+            }
+            if(offset2<right_path.children[2].length){
+                group.children[2].position =right_path.children[2].getPointAt(offset2)+ new Point(0,-9);
+            } else {
+                group.children[2].visible = false;
+            }
+            if(offset2<right_path.children[3].length){
+                group.children[3].position =right_path.children[3].getPointAt(offset2)+ new Point(0,-9);
+            } else {
+                group.children[3].visible = false;
+            }
+            if(offset2<right_path.children[4].length){
+                group.children[4].position =right_path.children[4].getPointAt(offset2)+ new Point(0,-9);
+            } else {
+                group.children[4].visible = false;
+                light_up(num);
+                flag[0] = 0;
+                progress_bar.dashArray = [1000, 1000];
+                enable_play_buttons();
+                view.off('frame', framehandler);
+            }
+            offset2+=speed/2;
+        }
+    }
+    view.on('frame', framehandler);
+}
+
+function movealong2paths(path1, path2, object, num, content_1, content_2) {
+    disable_play_buttons();
+    object.visible = true;
+    var offset1 = 0;
+    var offset2 = 0;
+    var offset3 = 0;
+    total_length = path1.length + path2.length;
+    flag[0] = 1;
+    var framehandler = function (event) {
+        if (offset1< path1.length){
+            object.position =path1.getPointAt(offset1)+ new Point(0,-9);
+            offset1+= speed/2; 
+            progress_bar.dashArray = [offset3, 1000];
+            offset3+= progress_bar.length*(path1.length/total_length)/(path1.length/(speed/2));
+        } else {
+            if(offset2 < path2.length) {
+                object.position =path2.getPointAt(offset2)+ new Point(0,-9);
+                offset2+= speed/2; 
+                progress_bar.dashArray = [offset3, 1000];
+                offset3+= progress_bar.length*(path2.length/total_length)/(path2.length/(speed/2));
+            } else {
+                enable_play_buttons();
+                object.visible = false;
+                light_up(num);
+                regaddress.children[2].content = content_1;
+                regvalue.children[2].content = content_2;
+                flag[0] = 0;
+                progress_bar.dashArray = [1000, 1000];
+                view.off('frame', framehandler);
+            }
+        }
+    }
+    view.on('frame', framehandler);
+}
+function movealong2paths_no_change(path1, path2, object, num) {
+    disable_play_buttons();
+    object.visible = true;
+    var offset1 = 0;
+    var offset2 = 0;
+    var offset3 = 0;
+    var total_length = path1.length + path2.length;
+    flag[0] = 1;
+    var framehandler = function (event) {
+        if (offset1< path1.length){
+            object.position =path1.getPointAt(offset1)+ new Point(0,-9);
+            offset1+=speed/2;
+            progress_bar.dashArray = [offset3, 1000];
+            offset3+= progress_bar.length*(path1.length/total_length)/(path1.length/(speed/2));
+        } else {
+            if(offset2 < path2.length) {
+                object.position =path2.getPointAt(offset2)+ new Point(0,-9);
+                offset2+=speed/2; 
+                progress_bar.dashArray = [offset3, 1000];
+                offset3+= progress_bar.length*(path2.length/total_length)/(path2.length/(speed/2));
+            } else {
+                object.visible = false;
+                light_up(num);
+                flag[0] = 0;
+                progress_bar.dashArray = [1000, 1000];
+                enable_play_buttons();
+                view.off('frame', framehandler)
+            }
+        }
+    }
+    view.on('frame', framehandler);
+}
+function stop_bit(path1, path2, object, num, content_1, content_2) {
+    disable_play_buttons();
+    object.visible = true;
+    var offset1 = 0;
+    var offset2 = 0;
+    var offset3 = 0;
+    var total_length = path1.length + path2.length;
+    flag[0] = 1;
+    var framehandler = function (event) {
+        if (offset1< path1.length){
+            object.position =path1.getPointAt(offset1)+ new Point(0,-9);
+            offset1+= speed/2;
+            progress_bar.dashArray = [offset3, 1000];
+            offset3+= progress_bar.length*(path1.length/total_length)/(path1.length/(speed/2));
+        } else {
+            if(offset2 < path2.length) {
+                object.position =path2.getPointAt(offset2)+ new Point(0,-9);
+                offset2+= speed/2; 
+                progress_bar.dashArray = [offset3, 1000];
+                offset3+= progress_bar.length*(path2.length/total_length)/(path2.length/(speed/2));
+            } else {
+                object.visible = false;
+                light_up(num);
+                regaddress.children[2].content = content_1;
+                regvalue.children[2].content = content_2;
+                trafficgreen(5);
+                slavegreen(5);
+                flag[0] = 0;
+                progress_bar.dashArray = [1000, 1000];
+                enable_play_buttons();
+                view.off('frame', framehandler);
+            }
+        }
+    }
+    view.on('frame', framehandler);
+}
+// function onFrame(event){
+//     movealong2paths(left_path.children[4], 0, value_item, event);
+// }
+
+function reversealong2paths(path1, path2, object, num) {
+    disable_play_buttons();
+    object.visible = true;  
+    var offset1 = path1.length;
+    var offset2 = path2.length;
+    var offset3 = 0;
+    var total_length = path1.length + path2.length;
+    flag[0] = 1;
+    var framehandler = function (event) {
+        if (offset1 > 0){
+            object.position =path1.getPointAt(offset1)+ new Point(0,-9);
+            offset1-= speed/2;
+            progress_bar.dashArray = [offset3, 1000];
+            offset3+= progress_bar.length*(path1.length/total_length)/(path1.length/(speed/2));
+        } else {
+            if(offset2 > 0) {
+                object.position =path2.getPointAt(offset2)+ new Point(0,-9);
+                offset2-= speed/2;
+                progress_bar.dashArray = [offset3, 1000];
+                offset3+= progress_bar.length*(path2.length/total_length)/(path2.length/(speed/2));
+            } else {
+                object.visible = false;
+                light_up(num);
+                flag[0] = 0;
+                progress_bar.dashArray = [1000, 1000];
+                enable_play_buttons();
+                view.off('frame', framehandler)
+            }
+        }
+    }
+    view.on('frame', framehandler);
+}
+
+
+function transmit(first, second, num, reg_address, reg_value){
+    trafficgreen(first);
+    slavegreen(second);
+    movealong2paths(left_path.children[4-first], right_path.children[second], value_item, num, reg_address, reg_value);
+}
+function transmit_no_change(first, second, num, object){
+    trafficgreen(first);
+    slavegreen(second);
+    movealong2paths_no_change(left_path.children[4-first], right_path.children[second], object, num);
+}
+function transmit_stop(first, second, num, reg_address, reg_value){
+    trafficgreen(first);
+    slavegreen(second);
+    stop_bit(left_path.children[4-first], right_path.children[second], single_signal, num, reg_address, reg_value);
+}
+function rtransmit(first, second, num, object){
+    trafficgreen(first);
+    slavegreen(second);
+    reversealong2paths(right_path.children[second], left_path.children[4-first], object, num);
+}
+function propagate(first, num, object, group){
+    trafficgreen(first);
+    allslaves.strokeColor = 'green';
+    propagatefrom(left_path.children[4-first], object, group, num);
+}
+
+function write_slave_address(RW, reg_address, reg_value){
+    address = '0x44';
+    change_value_item(address, RW)
+    propagate(2, 1, value_item, prop_clones);
+    regaddress.children[2].content = reg_address;
+    regvalue.children[2].content = reg_value;
+}
+function slave_acknowledge(){
+    light_up(0);
+    address = '';
+    read = 'A';
+    change_signal_item(read);
+    rtransmit(2, 4, 0, single_signal);
+}
+function slave_nacknowledge(){
+    light_up(0);
+    address = '';
+    read = 'Ā';
+    change_value_item(address, read);
+    rtransmit(2, 4, 0, single_signal);
+}
+function master_acknowledge(){
+    light_up(0);
+    read = 'A';
+    change_signal_item(read);
+    transmit_no_change(2, 4, 0, single_signal);
+}
+function master_nacknowledge(){
+    light_up(0);
+    read = 'Ā';
+    change_signal_item(read);
+    transmit_no_change(2, 4, 0, single_signal);
+}
+function write_slave_reg_address(reg_address, reg_value){
+    transmit(2, 4, 2, reg_address, reg_value);
+}
+
+function write_slave_reg_value(reg_address, reg_value){
+    address = '0x80';
+    read = '';
+    change_value_item(address, read);
+    transmit(2, 4, 3, reg_address, reg_value);
+}
+function read_slave_value(value, reg_address, reg_value){
+    read = '';
+    change_value_item(value, read)
+    light_up(3);
+    regaddress.children[2].content = reg_address;
+    regvalue.children[2].content = reg_value;
+    rtransmit(2, 4, 3, value_item);
+}
+function start_scene(){
+    read = 'S';
+    change_signal_item(read);
+    reg_address = '';
+    reg_value = '';
+    propagate(2, 0, single_signal, signal_clones);
+}
+function complete_stop(){
+    read = 'P';
+    change_signal_item(read);
+    transmit_stop(2, 4, 0, nth, nth);
+}
+function stop_scene(reg_address, reg_value){
+    read = 'P';
+    change_signal_item(read);
+    transmit_stop(2, 4, 0, reg_address, reg_value);
+}
+
+// function movealong1path(path, object){
+//     object.visible = true;
+//     var offset = 0;
+//     flag[0] = 1;
+//     object.onFrame = function (event) {
+//         if (offset< path.length){
+//             object.position =path.getPointAt(offset)+ new Point(0,-9);
+//             offset+=event.delta*100; // speed - 150px/second
+//         } else {
+//             object.visible = false;
+//             flag[0] = 0;
+//         }
+//     }
+// }
+// function reversealong1path(path, object){
+//     object.visible = true;
+//     var offset = path.length;
+//     flag[0] = 1;
+//     object.onFrame = function (event) {
+//         if (offset> 0){
+//             object.position =path.getPointAt(offset)+ new Point(0,-9);
+//             offset-=event.delta*100; // speed - 150px/second
+//         } else {
+//             object.visible = false;
+//             flag[0] = 0;
+//         }
+//     }
+// }
+
+
+
 var topleft = new Point(50,50);
 var rectsize = new Size(t_width,t_height);
 var rect = new Rectangle(topleft, rectsize);
@@ -1699,147 +2200,7 @@ regvalue.children[2].content = '';
 regvalue.position += new Point(0, 50);
 reg_group.addChild(regvalue);
 
-function light_up(num){
-    for(i = 1; i<4; i++){
-        if(i == num){
-            reg_group.children[i].children[0].fillColor = 'green';
-        } else {
-            reg_group.children[i].children[0].fillColor = 'white';
-        }
-    }
-}
 
-function draw_2(path, coordinate, type){
-    path.add(new Point(coordinate.x[type], coordinate.y[type]));
-}
-function right(coordinate, type) {
-    coordinate.x[type]+= firstline;
-}
-function farright(coordinate, type) {
-    coordinate.x[type]+= secondline;
-}
-function down(coordinate, type) {
-    coordinate.y[type]+= spacing;
-}
-function up(coordinate, type) {
-    coordinate.y[type]-= spacing;
-}
-function trafficgreen(num){
-    for (var i = 0; i<5; i++){
-        if(i == num){
-            collection.children[i].children[3].fillColor= 'green';
-            collection.children[i].children[1].fillColor= 'black';
-            hor1.children[4-i].strokeColor = 'green';
-        } else {
-            collection.children[i].children[1].fillColor= 'red';
-            collection.children[i].children[3].fillColor= 'black';
-            hor1.children[4-i].strokeColor = 'red';
-        }
-    }
-    switch(num) {
-        case '0': case 0:
-            ver1.children[0].strokeColor = 'red';
-            ver1.children[1].strokeColor = 'red';
-            ver1.children[2].strokeColor = 'green';
-            ver1.children[3].strokeColor = 'green';
-            across.strokeColor = 'green';
-            break;  
-        case '1': case 1:
-            ver1.children[0].strokeColor = 'red';
-            ver1.children[1].strokeColor = 'red';
-            ver1.children[2].strokeColor = 'green';
-            ver1.children[3].strokeColor = 'red';
-            across.strokeColor = 'green';
-            break;      
-        case '2': case 2:
-            ver1.children[0].strokeColor = 'red';
-            ver1.children[1].strokeColor = 'red';
-            ver1.children[2].strokeColor = 'red';
-            ver1.children[3].strokeColor = 'red';
-            across.strokeColor = 'green';
-            break;  
-        case '3': case 3:
-            ver1.children[0].strokeColor = 'red';
-            ver1.children[1].strokeColor = 'green';
-            ver1.children[2].strokeColor = 'red';
-            ver1.children[3].strokeColor = 'red';
-            across.strokeColor = 'green';
-            break; 
-        case '4': case 4:
-            ver1.children[0].strokeColor = 'green';
-            ver1.children[1].strokeColor = 'green';
-            ver1.children[2].strokeColor = 'red';
-            ver1.children[3].strokeColor = 'red';
-            across.strokeColor = 'green';
-            break;   
-        case '5': case 5:
-            ver1.children[0].strokeColor = 'red';
-            ver1.children[1].strokeColor = 'red';
-            ver1.children[2].strokeColor = 'red';
-            ver1.children[3].strokeColor = 'red';
-            across.strokeColor = 'red';
-            break;   
-
-    }
-}
-function slavegreen(num){
-    for (var i = 0; i<5; i++){
-        if(i == num){
-            hor2.children[4-i].strokeColor = 'green';
-        } else {
-            hor2.children[4-i].strokeColor = 'red';
-        }
-    }
-    switch(num) {
-        case '0': case 0: 
-            ver2.children[0].strokeColor = 'red';
-            ver2.children[1].strokeColor = 'red';
-            ver2.children[2].strokeColor = 'green';
-            ver2.children[3].strokeColor = 'green';
-            across.strokeColor = 'green';
-            break;  
-        case '1': case 1:
-            ver2.children[0].strokeColor = 'red';
-            ver2.children[1].strokeColor = 'red';
-            ver2.children[2].strokeColor = 'green';
-            ver2.children[3].strokeColor = 'red';
-            across.strokeColor = 'green';
-            break;      
-        case '2': case 2:
-            ver2.children[0].strokeColor = 'red';
-            ver2.children[1].strokeColor = 'red';
-            ver2.children[2].strokeColor = 'red';
-            ver2.children[3].strokeColor = 'red';
-            across.strokeColor = 'green';
-            break;  
-        case '3': case 3:
-            ver2.children[0].strokeColor = 'red';
-            ver2.children[1].strokeColor = 'green';
-            ver2.children[2].strokeColor = 'red';
-            ver2.children[3].strokeColor = 'red';
-            across.strokeColor = 'green';
-            break; 
-        case '4': case 4:
-            ver2.children[0].strokeColor = 'green';
-            ver2.children[1].strokeColor = 'green';
-            ver2.children[2].strokeColor = 'red';
-            ver2.children[3].strokeColor = 'red';
-            across.strokeColor = 'green';
-            break;
-        case '5': case 5:
-            ver2.children[0].strokeColor = 'red';
-            ver2.children[1].strokeColor = 'red';
-            ver2.children[2].strokeColor = 'red';
-            ver2.children[3].strokeColor = 'red';
-            across.strokeColor = 'red';
-            break;          
-    }
-}
-function all_red(){
-    light_up(0);
-    trafficgreen(5);
-    slavegreen(5);  
-}
 
 var value_item = new Group();
 circle = new Path.Circle(40,30,4);
@@ -1891,351 +2252,18 @@ for(var i = 0; i < 5; i++){
 }
 signal_clones.visible = false;
 
-function change_value_item(text, rw){
-    value_item.children[1].content = rw;
-    for(var i = 0; i < 5; i++){
-        prop_clones.children[i].children[3].content = text;
-    }
-    value_item.children[3].content = text;
-    for(var i = 0; i < 5; i++){
-        prop_clones.children[i].children[1].content = rw;
-    }
-}
-function change_signal_item(rw){
-    single_signal.children[1].content = rw;
-    for(var i = 0; i < 5; i++){
-        signal_clones.children[i].children[1].content = rw;
-    }
-}
 
 
 
 prop_clones.visible = false;
 // value_item.visible = false;
-function propagatefrom(path1, object, group, num) {
-    disable_play_buttons();
-    object.visible = true;
-    var offset1 = 0;
-    var offset2 = 0;
-    var offset3 = 0;
-    var total_length = path1.length + right_path.children[4].length;
-    flag[0] = 1;
-    var framehandler = function (event) {
-        if (offset1< path1.length){
-            object.position =path1.getPointAt(offset1)+ new Point(0,-9);
-            offset1+=speed/2; // speed - 150px/second
-            progress_bar.dashArray = [offset3, 1000];
-            offset3+= progress_bar.length*(path1.length/total_length)/(path1.length/(speed/2));
-        } else {
-            group.visible = true;
-            object.visible = false;
-            progress_bar.dashArray = [offset3, 1000];
-            offset3+= progress_bar.length*(right_path.children[4].length/total_length)/(right_path.children[4].length/(speed/2));
-            for(var i = 0; i<5; i++){
-                group.children[i].visible = true;
-            }
-            if(offset2<right_path.children[0].length){
-                group.children[0].position =right_path.children[0].getPointAt(offset2)+ new Point(0,-9);
-            } else {
-                group.children[0].visible = false;
-            }
-            if(offset2<right_path.children[1].length){
-                group.children[1].position =right_path.children[1].getPointAt(offset2)+ new Point(0,-9);
-            } else {
-                group.children[1].visible = false;
-            }
-            if(offset2<right_path.children[2].length){
-                group.children[2].position =right_path.children[2].getPointAt(offset2)+ new Point(0,-9);
-            } else {
-                group.children[2].visible = false;
-            }
-            if(offset2<right_path.children[3].length){
-                group.children[3].position =right_path.children[3].getPointAt(offset2)+ new Point(0,-9);
-            } else {
-                group.children[3].visible = false;
-            }
-            if(offset2<right_path.children[4].length){
-                group.children[4].position =right_path.children[4].getPointAt(offset2)+ new Point(0,-9);
-            } else {
-                group.children[4].visible = false;
-                light_up(num);
-                flag[0] = 0;
-                progress_bar.dashArray = [1000, 1000];
-                enable_play_buttons();
-                view.off('frame', framehandler);
-            }
-            offset2+=speed/2;
-        }
-    }
-    view.on('frame', framehandler);
-}
-
-function movealong2paths(path1, path2, object, num, content_1, content_2) {
-    disable_play_buttons();
-    object.visible = true;
-    var offset1 = 0;
-    var offset2 = 0;
-    var offset3 = 0;
-    total_length = path1.length + path2.length;
-    flag[0] = 1;
-    var framehandler = function (event) {
-        if (offset1< path1.length){
-            object.position =path1.getPointAt(offset1)+ new Point(0,-9);
-            offset1+= speed/2; 
-            progress_bar.dashArray = [offset3, 1000];
-            offset3+= progress_bar.length*(path1.length/total_length)/(path1.length/(speed/2));
-        } else {
-            if(offset2 < path2.length) {
-                object.position =path2.getPointAt(offset2)+ new Point(0,-9);
-                offset2+= speed/2; 
-                progress_bar.dashArray = [offset3, 1000];
-                offset3+= progress_bar.length*(path2.length/total_length)/(path2.length/(speed/2));
-            } else {
-                enable_play_buttons();
-                object.visible = false;
-                light_up(num);
-                regaddress.children[2].content = content_1;
-                regvalue.children[2].content = content_2;
-                flag[0] = 0;
-                progress_bar.dashArray = [1000, 1000];
-                view.off('frame', framehandler);
-            }
-        }
-    }
-    view.on('frame', framehandler);
-}
-function movealong2paths_no_change(path1, path2, object, num) {
-    disable_play_buttons();
-    object.visible = true;
-    var offset1 = 0;
-    var offset2 = 0;
-    var offset3 = 0;
-    var total_length = path1.length + path2.length;
-    flag[0] = 1;
-    var framehandler = function (event) {
-        if (offset1< path1.length){
-            object.position =path1.getPointAt(offset1)+ new Point(0,-9);
-            offset1+=speed/2;
-            progress_bar.dashArray = [offset3, 1000];
-            offset3+= progress_bar.length*(path1.length/total_length)/(path1.length/(speed/2));
-        } else {
-            if(offset2 < path2.length) {
-                object.position =path2.getPointAt(offset2)+ new Point(0,-9);
-                offset2+=speed/2; 
-                progress_bar.dashArray = [offset3, 1000];
-                offset3+= progress_bar.length*(path2.length/total_length)/(path2.length/(speed/2));
-            } else {
-                object.visible = false;
-                light_up(num);
-                flag[0] = 0;
-                progress_bar.dashArray = [1000, 1000];
-                enable_play_buttons();
-                view.off('frame', framehandler)
-            }
-        }
-    }
-    view.on('frame', framehandler);
-}
-function stop_bit(path1, path2, object, num, content_1, content_2) {
-    disable_play_buttons();
-    object.visible = true;
-    var offset1 = 0;
-    var offset2 = 0;
-    var offset3 = 0;
-    var total_length = path1.length + path2.length;
-    flag[0] = 1;
-    var framehandler = function (event) {
-        if (offset1< path1.length){
-            object.position =path1.getPointAt(offset1)+ new Point(0,-9);
-            offset1+= speed/2;
-            progress_bar.dashArray = [offset3, 1000];
-            offset3+= progress_bar.length*(path1.length/total_length)/(path1.length/(speed/2));
-        } else {
-            if(offset2 < path2.length) {
-                object.position =path2.getPointAt(offset2)+ new Point(0,-9);
-                offset2+= speed/2; 
-                progress_bar.dashArray = [offset3, 1000];
-                offset3+= progress_bar.length*(path2.length/total_length)/(path2.length/(speed/2));
-            } else {
-                object.visible = false;
-                light_up(num);
-                regaddress.children[2].content = content_1;
-                regvalue.children[2].content = content_2;
-                trafficgreen(5);
-                slavegreen(5);
-                flag[0] = 0;
-                progress_bar.dashArray = [1000, 1000];
-                enable_play_buttons();
-                view.off('frame', framehandler);
-            }
-        }
-    }
-    view.on('frame', framehandler);
-}
-// function onFrame(event){
-//     movealong2paths(left_path.children[4], 0, value_item, event);
-// }
-
-function reversealong2paths(path1, path2, object, num) {
-    disable_play_buttons();
-    object.visible = true;  
-    var offset1 = path1.length;
-    var offset2 = path2.length;
-    var offset3 = 0;
-    var total_length = path1.length + path2.length;
-    flag[0] = 1;
-    var framehandler = function (event) {
-        if (offset1 > 0){
-            object.position =path1.getPointAt(offset1)+ new Point(0,-9);
-            offset1-= speed/2;
-            progress_bar.dashArray = [offset3, 1000];
-            offset3+= progress_bar.length*(path1.length/total_length)/(path1.length/(speed/2));
-        } else {
-            if(offset2 > 0) {
-                object.position =path2.getPointAt(offset2)+ new Point(0,-9);
-                offset2-= speed/2;
-                progress_bar.dashArray = [offset3, 1000];
-                offset3+= progress_bar.length*(path2.length/total_length)/(path2.length/(speed/2));
-            } else {
-                object.visible = false;
-                light_up(num);
-                flag[0] = 0;
-                progress_bar.dashArray = [1000, 1000];
-                enable_play_buttons();
-                view.off('frame', framehandler)
-            }
-        }
-    }
-    view.on('frame', framehandler);
-}
-// function movealong1path(path, object){
-//     object.visible = true;
-//     var offset = 0;
-//     flag[0] = 1;
-//     object.onFrame = function (event) {
-//         if (offset< path.length){
-//             object.position =path.getPointAt(offset)+ new Point(0,-9);
-//             offset+=event.delta*100; // speed - 150px/second
-//         } else {
-//             object.visible = false;
-//             flag[0] = 0;
-//         }
-//     }
-// }
-// function reversealong1path(path, object){
-//     object.visible = true;
-//     var offset = path.length;
-//     flag[0] = 1;
-//     object.onFrame = function (event) {
-//         if (offset> 0){
-//             object.position =path.getPointAt(offset)+ new Point(0,-9);
-//             offset-=event.delta*100; // speed - 150px/second
-//         } else {
-//             object.visible = false;
-//             flag[0] = 0;
-//         }
-//     }
-// }
 var z = 0;
 var z1 = 0;
 var z2 = 0;
 var z3 = 0;
 var z4 = 0;
 
-function transmit(first, second, num, reg_address, reg_value){
-    trafficgreen(first);
-    slavegreen(second);
-    movealong2paths(left_path.children[4-first], right_path.children[second], value_item, num, reg_address, reg_value);
-}
-function transmit_no_change(first, second, num, object){
-    trafficgreen(first);
-    slavegreen(second);
-    movealong2paths_no_change(left_path.children[4-first], right_path.children[second], object, num);
-}
-function transmit_stop(first, second, num, reg_address, reg_value){
-    trafficgreen(first);
-    slavegreen(second);
-    stop_bit(left_path.children[4-first], right_path.children[second], single_signal, num, reg_address, reg_value);
-}
-function rtransmit(first, second, num, object){
-    trafficgreen(first);
-    slavegreen(second);
-    reversealong2paths(right_path.children[second], left_path.children[4-first], object, num);
-}
-function propagate(first, num, object, group){
-    trafficgreen(first);
-    allslaves.strokeColor = 'green';
-    propagatefrom(left_path.children[4-first], object, group, num);
-}
 
-function write_slave_address(RW, reg_address, reg_value){
-    address = '0x44';
-    change_value_item(address, RW)
-    propagate(2, 1, value_item, prop_clones);
-    regaddress.children[2].content = reg_address;
-    regvalue.children[2].content = reg_value;
-}
-function slave_acknowledge(){
-    light_up(0);
-    address = '';
-    read = 'A';
-    change_signal_item(read);
-    rtransmit(2, 4, 0, single_signal);
-}
-function slave_nacknowledge(){
-    light_up(0);
-    address = '';
-    read = 'Ā';
-    change_value_item(address, read);
-    rtransmit(2, 4, 0, single_signal);
-}
-function master_acknowledge(){
-    light_up(0);
-    read = 'A';
-    change_signal_item(read);
-    transmit_no_change(2, 4, 0, single_signal);
-}
-function master_nacknowledge(){
-    light_up(0);
-    read = 'Ā';
-    change_signal_item(read);
-    transmit_no_change(2, 4, 0, single_signal);
-}
-function write_slave_reg_address(reg_address, reg_value){
-    transmit(2, 4, 2, reg_address, reg_value);
-}
-
-function write_slave_reg_value(reg_address, reg_value){
-    address = '0x80';
-    read = '';
-    change_value_item(address, read);
-    transmit(2, 4, 3, reg_address, reg_value);
-}
-function read_slave_value(value, reg_address, reg_value){
-    read = '';
-    change_value_item(value, read)
-    light_up(3);
-    regaddress.children[2].content = reg_address;
-    regvalue.children[2].content = reg_value;
-    rtransmit(2, 4, 3, value_item);
-}
-function start_scene(){
-    read = 'S';
-    change_signal_item(read);
-    reg_address = '';
-    reg_value = '';
-    propagate(2, 0, single_signal, signal_clones);
-}
-function complete_stop(){
-    read = 'P';
-    change_signal_item(read);
-    transmit_stop(2, 4, 0, nth, nth);
-}
-function stop_scene(reg_address, reg_value){
-    read = 'P';
-    change_signal_item(read);
-    transmit_stop(2, 4, 0, reg_address, reg_value);
-}
 var scene_num_1 = new PointText(new Point(200, 40));
 
 
@@ -2335,66 +2363,9 @@ function read_scenario_2(num){
 
 layer2.visible = false;
 layer1.visible = false;
-
+//-------------------------------------------------Start layer 3------------------------------------------------------------------------
+//--------------------------------------------------------------------------------------------------------------------------------------
 layer3 = new Layer();
-
-var scenario = new PointText(new Point(50,25));
-scenario.content = '';
-scenario.fontSize = 20;
-scenario.fontWeight = 'bold';
-scenario.fillColor = 'black';
-
-var instruction_overlay = new Group();
-var arrow = new Group();
-var box = new Path.Rectangle(new Point(100,100), new Size(15,45));
-box.fillColor = 'red';
-var triangle = new Path.RegularPolygon(new Point(107, 100), 3, 20);
-triangle.fillColor = 'red';
-arrow.addChild(box);
-arrow.addChild(triangle);
-arrow.rotate(180);
-arrow.position += new Point(305, 330);
-instruction_overlay.addChild(arrow);
-var text = new PointText(new Point (340, 400));
-text.strokeColor = 'red';
-text.fontSize = 15;
-text.content = 'Controls and Progress Bar';
-instruction_overlay.addChild(text);
-var box = new Path.Rectangle(new Point(880,30), new Size(390, 242));
-box.strokeColor = 'red';
-instruction_overlay.addChild(box);
-var instruction_text = text.clone();
-instruction_text.content = 'Instructional text will be located here.';
-instruction_text.position += (new Point(550, -375));
-instruction_overlay.addChild(instruction_text);
-menu_arrow = arrow.clone();
-menu_arrow.rotate(180);
-menu_arrow.position += new Point(-200, -400);
-menu_text = instruction_text.clone();
-menu_text.content = 'Menu';
-menu_text.position += new Point(-695, 75);
-feedback_arrow = arrow.clone();
-feedback_arrow.position += new Point(650, 15);
-feedback_text = text.clone();
-feedback_text.content = 'Open Feedback Form';
-feedback_text.position += new Point(650, 15);
-
-
-var progress_bar_wrapper = new Path();
-progress_bar_wrapper.strokeColor = 'darkgray';
-progress_bar_wrapper.strokeWidth = 20;
-progress_bar_wrapper.add(new Point(80, 500));
-progress_bar_wrapper.add(new Point(750, 500));
-
-var progress_bar = new Path();
-progress_bar.strokeColor = 'lightgray';
-progress_bar.strokeWidth = 20;
-progress_bar.add(new Point(80, 500));
-progress_bar.add(new Point(750, 500));
-progress_bar.visible = false;
-
-
-
 
 btn2.onclick = function update(){
     if(speed>1){
@@ -2406,100 +2377,6 @@ btn1.onclick = function update(){
     speed+=1;
     document.getElementById("speed_text").innerHTML = speed;
 }
-
-message_text = new PointText(new Point(890, 300))
-message_text.content = 'Show Message';
-message_text.fontSize = 30;
-message_text.visible = false;
-
-//test funtion for hover text box (needs to be styled by css)
-
-// function move_to_position(path1, object, group){
-//     disable_play_buttons();
-//     var clone = object.clone();
-//     var final = path1.getPointAt(0)- new Point(0,30);
-//     group.visible = false;
-//     object.visible = true;
-//     flag[0] = 1;
-//     var offset = 0;
-//     offset1 = 0;
-//     var path = new Path();
-//     path.add(object.position);
-//     path.add(final);
-//     var framehandler = function(event){
-//         if(offset < path.length) {
-//             clone.position = path.getPointAt(offset);
-//             offset+=speed;
-//             progress_bar.dashArray = [offset1, 1000];
-//             offset1+= progress_bar.length / (path.length/speed);
-//         } else {
-//             clone.remove();
-//             group.position = final + new Point(0,21);
-//             group.visible = true;
-//             flag[0] = 0;
-//             progress_bar.dashArray = [1000, 1000];
-//             enable_play_buttons();
-//             view.off('frame', framehandler)
-//         }
-//     }
-//     view.on('frame', framehandler);
-// }
-var message_flag = 0;
-
-var display_message = function(){
-    if(message_flag == 0){
-        document.getElementById('master_popup').style.display = 'block';
-        message_flag = 1;
-    } else if(message_flag == 1){
-        document.getElementById('master_popup').style.display = 'none';
-        message_flag = 0;
-    }
-}
-
-// var display_diagram1_text = function(){
-
-// }
-
-message_text.on('mousedown', display_message);
-
-
-message_text.on('mouseenter', function() {
-    message_text.fillColor = 'grey';
-});
-
-message_text.on('mouseleave', function() {
-    message_text.fillColor = 'black';
-});
-
-diagram1_button.on('mouseenter', function(){
-    diagram1_button.children[0].fillColor = 'lightgray';
-    diagram1_button.children[1].fillColor = 'darkgray';
-    document.getElementById('diagram_1').style.display = 'block';
-});
-
-diagram1_button.on('mouseleave', function(){
-    diagram1_button.children[0].fillColor = 'darkgray';
-    diagram1_button.children[1].fillColor = 'black';
-    document.getElementById('diagram_1').style.display = 'none';
-});
-
-diagram2_button.on('mouseenter', function(){
-    diagram2_button.children[0].fillColor = 'lightgray';
-    diagram2_button.children[1].fillColor = 'darkgray';
-    document.getElementById('diagram_2').style.display = 'block';
-});
-
-diagram2_button.on('mouseleave', function(){
-    diagram2_button.children[0].fillColor = 'darkgray';
-    diagram2_button.children[1].fillColor = 'black';
-    document.getElementById('diagram_2').style.display = 'none';
-});
-
-// diagram1_button.on('mousedown', display_diagram1_text)
-
-
-pages = new Group();
-read_pages = new Group();
 
 function add_page(group, txt){
     page = new PointText(new Point(890, 50));
@@ -2527,71 +2404,7 @@ function show_read_page(num){
         }
     }
 }
-//1
-add_page(pages, "1 This application will be simulating the process of I2C communications between a Master and Slave for the purposes of enabling a LSB sensor. On the left you will see a waveform being drawn that will depict the data to be communicated between the Master and Slave. Any part of the diagram being highlighted in light blue is being controlled by the Master, while anything highlighted in yellow is being controlled by the Slave.");
-//2
-add_page(pages, "2 We will need a start condition which is defined as SDA going from high to low while SCL is high, the first byte of data we will send is the address of the LSB sensor: 0x44, or 1000100, however since the 8th bit is set to 0 to indicate write transmission, the actual byte to be sent is 10001000 or 0x88, this is then followed by the acknowledge bit controlled by the slave, in this case a 0 representing ACK.");
-//3
-add_page(pages, '3 This series of communications can be represented as such, in a block diagram.');
-//4
-add_page(pages, '4 The diagram shows a 5 different master devices represented by blue circles, and 5 different slave devices represented by the yellow circles. As I2C is a half-duplex, serial communication, only one device can transmit at any point in time. Furthermore, there is collision detection and arbitration to allow for multiple masters. At any point when one master is communicating, no other masters will be able to communicate, this is represented by the traffic light which will show which master is communicating while the others are forced to stop. This diagram will show how each segment of the waveform shown earlier is transmitted.');
-//5
-add_page(pages, '5 First, the start condition is given by the master to the bus, and all slaves will start listening to the bus. As I2C communication is half-duplex, only one device can transmit at any time, in this way it is somewhat like having a conversation where each party has to affirm that they have received a message. The chat window below shows a conversation between the master and slave as each bit is sent across.');
-//6
-add_page(pages, '6 The master will now propagate the slave address it wants to communicate with onto the bus, for this demonstration, our top most slave is the LSB sensor with the Slave Address 0x44.');
-//7
-add_page(pages, '7 The slave then acknowledges that it has received the message by replying with an acknowledge bit.');
-//8
-add_page(pages, '8 Since we want to enable the LSB sensor, our next step is communicating the address of the command register on the light. As such we will want to transmit 0x00, or 00000000, with an acknowledge bit.');
-//9
-add_page(pages, '9 The register address is sent by the master and then acknowledged by the slave.');
-//10
-add_page(pages, '10 Finally, the master will transmit the value which to write onto the register, bit 7 controls the enabling of the LSB sensor, with 0 disabling the ADC-core, and 1 enabling the ADC-core. As such our waveform will show 1000000, with an acknowledge bit of 0. We then want to stop communications which requires a stop condition to be transmitted by the master, which is defined as the SDA going from low to high while SCL is high.');
-//11
-add_page(pages, '11 As such the value will first be transmitted by the master, followed by an acknowledge from the slave, and finally a stop condition from the master.')
-//12 
-add_page(pages, '12 This is the last page for this scene. You can either go through the Reading scenario if you have not, or go on to complete the feedback survey');
 
-//1
-add_page(read_pages, "1 This application will be simulating the process of I2C communications between a Master and Slave for the purposes of enabling a LSB sensor. On the left you will see a waveform being drawn that will depict the data to be communicated between the Master and Slave. Any part of the diagram being highlighted in light blue is being controlled by the Master, while anything highlighted in yellow is being controlled by the Slave.");
-//2
-add_page(read_pages, "2 We will be simulating the process of reading from the light sensor. The first set of signals are a start condition, the slave address and a write bit. The address of the LSB sensor: 0x44, or 1000100, however since the 8th bit is set to 0 to indicate a write transmission, the actual byte to be sent is 10001000 or 0x88, followed by an acknowledge bit as can be seen on the diagram to the left.");
-//3
-add_page(read_pages, "3 This series of communications can be presented as such, in a block diagram.");
-//4
-add_page(read_pages, "4 We will now proceed to view how each part of the signal is transmitted by the master/slave. To the left you can see a number of masters represented by the light blue circles, while slaves are represented by the yellow circles. As I2C is a half-duplex, serial communication, only one device can transmit at any point in time. Furthermore, there is collision detection and arbitration to allow for multiple masters. At any point when one master is communicating, no other masters will be able to communicate, this is represented by the traffic light which will show which master is communicating while the others are forced to stop.");
-//5
-add_page(read_pages, "5 The start condition is given by the master to the bus, and all slaves start listening to the bus. As I2C communication is half-duplex, only one device can transmit at any time, in this way it is somewhat like having a conversation where each party has to affirm that they have received a message. The chat window below shows a representation of a conversation between the master and slave as each bit is sent across.");
-//6
-add_page(read_pages, '6 The master will now propagate the slave address it wants to communicate with onto the bus followed by a write bit, for this demonstration, our top most slave is the LSB sensor with the Slave Address 0x44.');
-//7
-add_page(read_pages, '7 The slave then acknowledges that it has received the message by replying with an acknowledge bit.');
-//8
-add_page(read_pages, '8 The next step is for the Master to instruct the slave on the register it wants to access, in this case we want to read from the light sensor register address with address 0x04 or 00000100. This is followed by an acknowledge bit from the slave. A stop condition is also necessary as we will need to initiate a change in direction of communication.');
-//9
-add_page(read_pages, '9 The register address is transmitted by the Master, followed by an acknowledge from the slave. Communications are then stopped with a stop condition propagated from the master.')
-//10
-add_page(read_pages, '10 Communications are then stopped with a stop condition propagated from the master');
-//11
-add_page(read_pages, '11 We need initiate another start condition together with the slave address since we closed our last set of communications. Once again the actual byte of data to be sent is shifted since the read bit needs to be included.');
-//12
-add_page(read_pages, '12 The process is the same as the first time communications are initiated, except the master specifies that it wants to read instead of write.');
-//13
-add_page(read_pages, '13 The data read from the slave is 11001011 or 0xCB. We will then close communications with a not acknowledge (NACK) bit and a stop condition.');
-//14
-add_page(read_pages, '14 The data is sent from the slave to the master.');
-//15
-add_page(read_pages, '15 If we wanted to continue reading from the slave, we would transmit an acknowledge bit. However, as we want to stop communications, a NACK bit is transmitted instead.');
-//16
-add_page(read_pages, '16 It is followed by a stop condition to finish the transfer.');
-//17
-add_page(read_pages, '17 While in this demonstration we initiated a new series of communication, it is also possible to immediately change direction without first initiating start condition. Instead, a repeated start condition would take the place of the second start condition                                                           This is the last page for this scene. You can either look through the Enable scenario if you have not or go on to complete the survey.');
-
-show_read_page(0);
-show_page(0);
-
-var chatMessages = [];
-var r_chatMessages = [];
 function write_message(message, type){
     content = '';
     if(type == 1) {
@@ -2631,56 +2444,13 @@ function write_r_message(message, type){
     });
 }
 
-write_message('Hello is anyone there?',  0);
-write_message('I am looking for the light sensor, its address is 0x44, I want to transmit some data ', 0);
-write_message('Yes, that is me', 1);
-write_message('I want to access the command register', 0);
-write_message('Okay then', 1);
-write_message('Okay good, I would like to enable the ADC core', 0);
-write_message('Sure, I have done that for you', 1);
-write_message('Thank you, that will be all from me', 0);
-
-write_r_message('Hello is anyone there?', 0);
-write_r_message('I am looking for the light sensor, its address is 0x44, I want to transmit some data', 0);
-write_r_message('Yes, that is me', 1);
-write_r_message('I want to access light sensor data register', 0);
-write_r_message('Okay then', 1);
-write_r_message('Alright that will be all from me', 0);
-write_r_message('Hello is anyone there?', 0);
-write_r_message('I am looking for the light sensor, its address is 0x44, I want to read some data', 0);
-write_r_message('Yes, that is me', 1);
-write_r_message('Here is the data you requested', 1);
-write_r_message('Thank you, I do not need any more data', 0);
-write_r_message('That will be all from me', 0);
-
-  var chatDelay = 0;
-  
-  function onRowAdded() {
+function onRowAdded() {
     $('.chat-container').stop(true, true).animate({
       scrollTop: $('.chat-container').prop('scrollHeight')
     });
   };
-//   $.each(chatMessages, function(index, obj) {
-//     chatDelay = chatDelay;
-//     chatDelay2 = chatDelay + obj.delay;
-//     chatDelay3 = chatDelay2 + 10;
-//     scrollDelay = chatDelay;
-//     chatTimeString = " ";
-//     msgname = "." + obj.name;
-//     msginner = ".messageinner-" + obj.name;
-//     spinner = ".sp-" + obj.name;
-//     if (obj.showTime == true) {
-//       chatTimeString = "<span class='message-time'>" + obj.time + "</span>";
-//     }
-//     $(".chat-message-list").append("<li class='message-" + obj.align + " " + obj.name + "' hidden><div class='sp-" + obj.name + "'><span class='spinme-" + obj.align + "'><div class='spinner'><div class='bounce1'></div><div class='bounce2'></div><div class='bounce3'></div></div></span></div><div class='messageinner-" + obj.name + "' hidden><span class='message-text'>" + obj.msg + "</span>" + chatTimeString + "</div></li>");
-//     $(msgname).delay(chatDelay).fadeIn();
-//     $(spinner).delay(chatDelay2).hide(1);
-//     $(msginner).delay(chatDelay3).fadeIn();
-//     setTimeout(onRowAdded, chatDelay);
-//     setTimeout(onRowAdded, chatDelay3);
-//     chatDelay = chatDelay3;
-//   });
-function add_message(obj){
+
+  function add_message(obj){
     chatDelay = chatDelay;
     chatDelay2 = chatDelay 
     chatDelay3 = chatDelay2 + 10;
@@ -2764,23 +2534,6 @@ function feedback_button_not_glowing(){
     $('#feedback').removeClass('glowing');
     document.getElementById('feedback').style.color = 'gray';
 }
-
-
-var path = new Rectangle(new Point(500,400), new Size(50,50));
-var box = new Path.Rectangle(path);
-box_diagram = en_diagram.clone();
-box_diagram.children[0].position += new Point(-80, 100);
-box_diagram.children[1].position += new Point(-240, 100);
-box_diagram.children[2].position += new Point(-380, 100);
-layer2.addChild(box_diagram);
-
-read_box_diagram = read_diagram.clone();
-read_box_diagram.children[0].position += new Point(40, 100);
-read_box_diagram.children[1].position += new Point(-140, 100);
-read_box_diagram.children[2].position += new Point(-280, 100);
-read_box_diagram.children[3].position += new Point(-460, 100);
-layer2.addChild(read_box_diagram);
-// box_diagram.children[0].visible = true;
 
 function show_layer(num){
     clear_messages();
@@ -2896,6 +2649,431 @@ function show_box_children(group, num){
     //         break;
     // }
 }
+
+function clear_waves(){
+    all_waves.removeChildren();
+}
+
+function clear_all(){
+    all_waves.removeChildren();
+    number_text.removeChildren();
+    clear_control();
+    show_en_diagram(0);
+    show_read_diagram(0);
+    show_box_diagram(99);
+    show_read_box_diagram(99);
+    clearboxes();
+    all_red();
+    feedback_button_not_glowing();
+    value_item.visible = false;
+    single_signal.visible = false;
+}
+
+enable_btn.onclick = function update(){
+    clear_all();
+    scene = 1;
+    scene_num = 0;
+    scene_num_1.content = scene_num;
+    testing.content = scene_num;
+    compiled_enable_scenario(scene_num);
+    show_read_page(0);
+    document.getElementById('enable_btn').disabled = true;
+    document.getElementById('read_btn').disabled = false;
+    enable_play_buttons();
+}
+
+enable_set_2.onclick = function update(){
+    clear_all();
+    show_read_page(0);
+    scene = 1;
+    scene_num = 10;
+    compiled_enable_scenario(scene_num);
+}
+
+enable_set_3.onclick = function update(){
+    clear_all();
+    show_read_page(0);
+    scene = 1;
+    scene_num = 17;
+    compiled_enable_scenario(scene_num);
+}
+
+read_btn.onclick = function update(){
+    clear_all();
+    scene = 2;
+    scene_num = 0;
+    scene_num_1.content = scene_num;
+    testing.content = scene_num;
+    compiled_read_scenario(scene_num);
+    show_page(0);
+    document.getElementById('enable_btn').disabled = false;
+    document.getElementById('read_btn').disabled = true;
+    enable_play_buttons();
+}
+
+read_set_2.onclick = function update(){
+    clear_all();
+    show_page(0);
+    scene = 2;
+    scene_num = 10;
+    compiled_read_scenario(scene_num);
+}
+
+read_set_3.onclick = function update(){
+    clear_all();
+    show_page(0);
+    scene = 2;
+    scene_num = 19;
+    compiled_read_scenario(scene_num);
+}
+
+read_set_4.onclick = function update(){
+    clear_all();
+    show_page(0);
+    scene = 2;
+    scene_num = 28;
+    compiled_read_scenario(scene_num);
+}
+
+
+prev_btn.onclick = function update(){
+    if(flag[0] == 0) {
+        if( scene_num >= 1){
+            scene_num--;
+        }
+        clear_all();
+        scene_num_1.content = scene_num;
+        testing.content = scene_num;
+        if(scene == 1) {
+            compiled_enable_scenario(scene_num);
+        }
+        if(scene == 2) {
+            compiled_read_scenario(scene_num);
+        }
+    }
+}
+next_btn.onclick = function update(){
+    // message_text.visible = true;
+    if(flag[0] == 0) {
+        clear_all();
+        scene_num++;
+        scene_num_1.content = scene_num;
+        testing.content = scene_num;
+        if(scene == 1) {
+            compiled_enable_scenario(scene_num);
+        }
+        if(scene == 2) {
+            compiled_read_scenario(scene_num);
+        }
+    }
+}
+
+play_btn.onclick = function update(){
+    if(flag[0] == 0 && scene == 1) {
+        clear_all();
+        compiled_enable_scenario(scene_num);
+    }
+    if(flag[0] == 0 && scene == 2) {
+        clear_all();
+        compiled_read_scenario(scene_num);
+    }
+}
+
+function show_overlay(){
+    document.getElementById('instructions_overlay').style.display = 'block';
+    instruction_overlay.visible = true;   
+}
+function hide_overlay(){
+    document.getElementById('instructions_overlay').style.display = 'none';
+    instruction_overlay.visible = false;  
+}   
+
+close_instructions.onclick = function update(){
+    hide_overlay();
+    document.getElementById('master_popup').style.display = 'block';
+}
+
+close_prior.onclick = function update(){
+    document.getElementById('first_survey').style.display = 'none';   
+    document.getElementById('main').style.overflow = 'scroll';
+    show_overlay();  
+}
+
+show_instruction.onclick = function update(){
+    show_overlay();  
+    document.getElementById('master_popup').style.display = 'none';
+}
+
+feedback.onclick = function update(){
+    // document.getElementById('last_survey').style.display = 'block';  
+    // document.getElementById('main').style.overflow = 'hidden';
+    window.open('https://docs.google.com/forms/d/e/1FAIpQLSfsudw44xkbIPprUacfXZVv2Bh7PcKkoNJgQKEm0mIAG4tK3g/viewform?usp=sf_link', '_blank');
+}
+
+close_feedback.onclick = function update(){
+    // document.getElementById('last_survey').style.display = 'none';   
+    // document.getElementById('main').style.overflow = 'scroll';
+}
+
+function disable_play_buttons(){
+    document.getElementById('prev_btn').disabled = true;
+    document.getElementById('next_btn').disabled = true;
+    document.getElementById('play_btn').disabled = true;
+}
+
+function enable_play_buttons(){
+    if(scene_num == 0) {
+        document.getElementById('prev_btn').disabled = true;
+    } else {
+        document.getElementById('prev_btn').disabled = false;
+    }
+    if(scene_num == 37 && scene == 2) {
+        console.log("disable true for scene 37");
+        document.getElementById('next_btn').disabled = true;
+    } else if(scene_num == 25 && scene == 1) {
+        document.getElementById('next_btn').disabled = true;
+    } else {
+        document.getElementById('next_btn').disabled = false;
+    }
+    document.getElementById('play_btn').disabled = false;
+}
+
+var scenario = new PointText(new Point(50,25));
+scenario.content = '';
+scenario.fontSize = 20;
+scenario.fontWeight = 'bold';
+scenario.fillColor = 'black';
+
+var instruction_overlay = new Group();
+var arrow = new Group();
+var box = new Path.Rectangle(new Point(100,100), new Size(15,45));
+box.fillColor = 'red';
+var triangle = new Path.RegularPolygon(new Point(107, 100), 3, 20);
+triangle.fillColor = 'red';
+arrow.addChild(box);
+arrow.addChild(triangle);
+arrow.rotate(180);
+arrow.position += new Point(305, 330);
+instruction_overlay.addChild(arrow);
+var text = new PointText(new Point (340, 400));
+text.strokeColor = 'red';
+text.fontSize = 15;
+text.content = 'Controls and Progress Bar';
+instruction_overlay.addChild(text);
+var box = new Path.Rectangle(new Point(880,30), new Size(390, 242));
+box.strokeColor = 'red';
+instruction_overlay.addChild(box);
+var instruction_text = text.clone();
+instruction_text.content = 'Instructional text will be located here.';
+instruction_text.position += (new Point(550, -375));
+instruction_overlay.addChild(instruction_text);
+menu_arrow = arrow.clone();
+menu_arrow.rotate(180);
+menu_arrow.position += new Point(-200, -400);
+menu_text = instruction_text.clone();
+menu_text.content = 'Menu';
+menu_text.position += new Point(-695, 75);
+feedback_arrow = arrow.clone();
+feedback_arrow.position += new Point(650, 15);
+feedback_text = text.clone();
+feedback_text.content = 'Open Feedback Form';
+feedback_text.position += new Point(650, 15);
+
+
+var progress_bar_wrapper = new Path();
+progress_bar_wrapper.strokeColor = 'darkgray';
+progress_bar_wrapper.strokeWidth = 20;
+progress_bar_wrapper.add(new Point(80, 500));
+progress_bar_wrapper.add(new Point(750, 500));
+
+var progress_bar = new Path();
+progress_bar.strokeColor = 'lightgray';
+progress_bar.strokeWidth = 20;
+progress_bar.add(new Point(80, 500));
+progress_bar.add(new Point(750, 500));
+progress_bar.visible = false;
+
+
+
+
+
+
+message_text = new PointText(new Point(890, 300))
+message_text.content = 'Show Message';
+message_text.fontSize = 30;
+message_text.visible = false;
+
+var message_flag = 0;
+
+var display_message = function(){
+    if(message_flag == 0){
+        document.getElementById('master_popup').style.display = 'block';
+        message_flag = 1;
+    } else if(message_flag == 1){
+        document.getElementById('master_popup').style.display = 'none';
+        message_flag = 0;
+    }
+}
+
+// var display_diagram1_text = function(){
+
+// }
+
+message_text.on('mousedown', display_message);
+
+
+message_text.on('mouseenter', function() {
+    message_text.fillColor = 'grey';
+});
+
+message_text.on('mouseleave', function() {
+    message_text.fillColor = 'black';
+});
+
+diagram1_button.on('mouseenter', function(){
+    diagram1_button.children[0].fillColor = 'lightgray';
+    diagram1_button.children[1].fillColor = 'darkgray';
+    document.getElementById('diagram_1').style.display = 'block';
+});
+
+diagram1_button.on('mouseleave', function(){
+    diagram1_button.children[0].fillColor = 'darkgray';
+    diagram1_button.children[1].fillColor = 'black';
+    document.getElementById('diagram_1').style.display = 'none';
+});
+
+diagram2_button.on('mouseenter', function(){
+    diagram2_button.children[0].fillColor = 'lightgray';
+    diagram2_button.children[1].fillColor = 'darkgray';
+    document.getElementById('diagram_2').style.display = 'block';
+});
+
+diagram2_button.on('mouseleave', function(){
+    diagram2_button.children[0].fillColor = 'darkgray';
+    diagram2_button.children[1].fillColor = 'black';
+    document.getElementById('diagram_2').style.display = 'none';
+});
+
+// diagram1_button.on('mousedown', display_diagram1_text)
+
+
+pages = new Group();
+read_pages = new Group();
+
+
+//1
+add_page(pages, "1 This application will be simulating the process of I2C communications between a Master and Slave for the purposes of enabling a LSB sensor. On the left you will see a waveform being drawn that will depict the data to be communicated between the Master and Slave. Any part of the diagram being highlighted in light blue is being controlled by the Master, while anything highlighted in yellow is being controlled by the Slave.");
+//2
+add_page(pages, "2 We will need a start condition which is defined as SDA going from high to low while SCL is high, the first byte of data we will send is the address of the LSB sensor: 0x44, or 1000100, however since the 8th bit is set to 0 to indicate write transmission, the actual byte to be sent is 10001000 or 0x88, this is then followed by the acknowledge bit controlled by the slave, in this case a 0 representing ACK.");
+//3
+add_page(pages, '3 This series of communications can be represented as such, in a block diagram.');
+//4
+add_page(pages, '4 The diagram shows a 5 different master devices represented by blue circles, and 5 different slave devices represented by the yellow circles. As I2C is a half-duplex, serial communication, only one device can transmit at any point in time. Furthermore, there is collision detection and arbitration to allow for multiple masters. At any point when one master is communicating, no other masters will be able to communicate, this is represented by the traffic light which will show which master is communicating while the others are forced to stop. This diagram will show how each segment of the waveform shown earlier is transmitted.');
+//5
+add_page(pages, '5 First, the start condition is given by the master to the bus, and all slaves will start listening to the bus. As I2C communication is half-duplex, only one device can transmit at any time, in this way it is somewhat like having a conversation where each party has to affirm that they have received a message. The chat window below shows a conversation between the master and slave as each bit is sent across.');
+//6
+add_page(pages, '6 The master will now propagate the slave address it wants to communicate with onto the bus, for this demonstration, our top most slave is the LSB sensor with the Slave Address 0x44.');
+//7
+add_page(pages, '7 The slave then acknowledges that it has received the message by replying with an acknowledge bit.');
+//8
+add_page(pages, '8 Since we want to enable the LSB sensor, our next step is communicating the address of the command register on the light. As such we will want to transmit 0x00, or 00000000, with an acknowledge bit.');
+//9
+add_page(pages, '9 The register address is sent by the master and then acknowledged by the slave.');
+//10
+add_page(pages, '10 Finally, the master will transmit the value which to write onto the register, bit 7 controls the enabling of the LSB sensor, with 0 disabling the ADC-core, and 1 enabling the ADC-core. As such our waveform will show 1000000, with an acknowledge bit of 0. We then want to stop communications which requires a stop condition to be transmitted by the master, which is defined as the SDA going from low to high while SCL is high.');
+//11
+add_page(pages, '11 As such the value will first be transmitted by the master, followed by an acknowledge from the slave, and finally a stop condition from the master.')
+//12 
+add_page(pages, '12 This is the last page for this scene. You can either go through the Reading scenario if you have not, or go on to complete the feedback survey');
+
+//1
+add_page(read_pages, "1 This application will be simulating the process of I2C communications between a Master and Slave for the purposes of enabling a LSB sensor. On the left you will see a waveform being drawn that will depict the data to be communicated between the Master and Slave. Any part of the diagram being highlighted in light blue is being controlled by the Master, while anything highlighted in yellow is being controlled by the Slave.");
+//2
+add_page(read_pages, "2 We will be simulating the process of reading from the light sensor. The first set of signals are a start condition, the slave address and a write bit. The address of the LSB sensor: 0x44, or 1000100, however since the 8th bit is set to 0 to indicate a write transmission, the actual byte to be sent is 10001000 or 0x88, followed by an acknowledge bit as can be seen on the diagram to the left.");
+//3
+add_page(read_pages, "3 This series of communications can be presented as such, in a block diagram.");
+//4
+add_page(read_pages, "4 We will now proceed to view how each part of the signal is transmitted by the master/slave. To the left you can see a number of masters represented by the light blue circles, while slaves are represented by the yellow circles. As I2C is a half-duplex, serial communication, only one device can transmit at any point in time. Furthermore, there is collision detection and arbitration to allow for multiple masters. At any point when one master is communicating, no other masters will be able to communicate, this is represented by the traffic light which will show which master is communicating while the others are forced to stop.");
+//5
+add_page(read_pages, "5 The start condition is given by the master to the bus, and all slaves start listening to the bus. As I2C communication is half-duplex, only one device can transmit at any time, in this way it is somewhat like having a conversation where each party has to affirm that they have received a message. The chat window below shows a representation of a conversation between the master and slave as each bit is sent across.");
+//6
+add_page(read_pages, '6 The master will now propagate the slave address it wants to communicate with onto the bus followed by a write bit, for this demonstration, our top most slave is the LSB sensor with the Slave Address 0x44.');
+//7
+add_page(read_pages, '7 The slave then acknowledges that it has received the message by replying with an acknowledge bit.');
+//8
+add_page(read_pages, '8 The next step is for the Master to instruct the slave on the register it wants to access, in this case we want to read from the light sensor register address with address 0x04 or 00000100. This is followed by an acknowledge bit from the slave. A stop condition is also necessary as we will need to initiate a change in direction of communication.');
+//9
+add_page(read_pages, '9 The register address is transmitted by the Master, followed by an acknowledge from the slave. Communications are then stopped with a stop condition propagated from the master.')
+//10
+add_page(read_pages, '10 Communications are then stopped with a stop condition propagated from the master');
+//11
+add_page(read_pages, '11 We need initiate another start condition together with the slave address since we closed our last set of communications. Once again the actual byte of data to be sent is shifted since the read bit needs to be included.');
+//12
+add_page(read_pages, '12 The process is the same as the first time communications are initiated, except the master specifies that it wants to read instead of write.');
+//13
+add_page(read_pages, '13 The data read from the slave is 11001011 or 0xCB. We will then close communications with a not acknowledge (NACK) bit and a stop condition.');
+//14
+add_page(read_pages, '14 The data is sent from the slave to the master.');
+//15
+add_page(read_pages, '15 If we wanted to continue reading from the slave, we would transmit an acknowledge bit. However, as we want to stop communications, a NACK bit is transmitted instead.');
+//16
+add_page(read_pages, '16 It is followed by a stop condition to finish the transfer.');
+//17
+add_page(read_pages, '17 While in this demonstration we initiated a new series of communication, it is also possible to immediately change direction without first initiating start condition. Instead, a repeated start condition would take the place of the second start condition                                                           This is the last page for this scene. You can either look through the Enable scenario if you have not or go on to complete the survey.');
+
+show_read_page(0);
+show_page(0);
+
+var chatMessages = [];
+var r_chatMessages = [];
+
+
+write_message('Hello is anyone there?',  0);
+write_message('I am looking for the light sensor, its address is 0x44, I want to transmit some data ', 0);
+write_message('Yes, that is me', 1);
+write_message('I want to access the command register', 0);
+write_message('Okay then', 1);
+write_message('Okay good, I would like to enable the ADC core', 0);
+write_message('Sure, I have done that for you', 1);
+write_message('Thank you, that will be all from me', 0);
+
+write_r_message('Hello is anyone there?', 0);
+write_r_message('I am looking for the light sensor, its address is 0x44, I want to transmit some data', 0);
+write_r_message('Yes, that is me', 1);
+write_r_message('I want to access light sensor data register', 0);
+write_r_message('Okay then', 1);
+write_r_message('Alright that will be all from me', 0);
+write_r_message('Hello is anyone there?', 0);
+write_r_message('I am looking for the light sensor, its address is 0x44, I want to read some data', 0);
+write_r_message('Yes, that is me', 1);
+write_r_message('Here is the data you requested', 1);
+write_r_message('Thank you, I do not need any more data', 0);
+write_r_message('That will be all from me', 0);
+
+  var chatDelay = 0;
+  
+  
+
+
+
+
+var path = new Rectangle(new Point(500,400), new Size(50,50));
+var box = new Path.Rectangle(path);
+box_diagram = en_diagram.clone();
+box_diagram.children[0].position += new Point(-80, 100);
+box_diagram.children[1].position += new Point(-240, 100);
+box_diagram.children[2].position += new Point(-380, 100);
+layer2.addChild(box_diagram);
+
+read_box_diagram = read_diagram.clone();
+read_box_diagram.children[0].position += new Point(40, 100);
+read_box_diagram.children[1].position += new Point(-140, 100);
+read_box_diagram.children[2].position += new Point(-280, 100);
+read_box_diagram.children[3].position += new Point(-460, 100);
+layer2.addChild(read_box_diagram);
+// box_diagram.children[0].visible = true;
+
+
 
 function compiled_enable_scenario(num){
     switch(num) {
@@ -3417,22 +3595,7 @@ function compiled_read_scenario(num){
     }
 }
 
-function clear_waves(){
-    all_waves.removeChildren();
-}
 
-function clear_all(){
-    all_waves.removeChildren();
-    number_text.removeChildren();
-    clear_control();
-    show_en_diagram(0);
-    show_read_diagram(0);
-    show_box_diagram(99);
-    show_read_diagram(99);
-    clearboxes();
-    all_red();
-    feedback_button_not_glowing();
-}
 
 var scene_num = 0;
 testing.content = scene_num;
@@ -3441,204 +3604,17 @@ scene_num_1.content = scene_num;
 //     if(event.key == '1' && flag[0] == 0) {
 //         compiled_enable_scenario(scene_num);
 //     }
-//     if(event.key == '2') {
-//         read_scenario(scene_num);
-//     }   
-//     if(event.key == 'd'){
-//         scene_num++;
-//         scene_num_1.content = scene_num;
-//     }
-//     if(event.key == 'a'){
-//         scene_num--;
-//         scene_num_1.content = scene_num;
-//     }
-//     if(event.key == 'z'){
-//         layer1.visible = false;
-//         layer2.visible = true;
-//     }
-//     if(event.key == 'x'){
-//         layer1.visible = true;
-//         layer2.visible = false;
-//     }
-//     if(event.key == '4' && flag[0] == 0){
-//         compiled_read_scenario(scene_num);
-//     }
-//     if(event.key =='5'){
-//     }
 // }
 
 
 //UI buttons
 
 
-enable_btn.onclick = function update(){
-    clear_all();
-    scene = 1;
-    scene_num = 0;
-    scene_num_1.content = scene_num;
-    testing.content = scene_num;
-    compiled_enable_scenario(scene_num);
-    show_read_page(0);
-    document.getElementById('enable_btn').disabled = true;
-    document.getElementById('read_btn').disabled = false;
-    enable_play_buttons();
-}
 
-enable_set_2.onclick = function update(){
-    clear_all();
-    show_read_page(0);
-    scene = 1;
-    scene_num = 10;
-    compiled_enable_scenario(scene_num);
-}
-
-enable_set_3.onclick = function update(){
-    clear_all();
-    show_read_page(0);
-    scene = 1;
-    scene_num = 17;
-    compiled_enable_scenario(scene_num);
-}
-
-read_btn.onclick = function update(){
-    clear_all();
-    scene = 2;
-    scene_num = 0;
-    scene_num_1.content = scene_num;
-    testing.content = scene_num;
-    compiled_read_scenario(scene_num);
-    show_page(0);
-    document.getElementById('enable_btn').disabled = false;
-    document.getElementById('read_btn').disabled = true;
-    enable_play_buttons();
-}
-
-read_set_2.onclick = function update(){
-    clear_all();
-    show_page(0);
-    scene = 2;
-    scene_num = 10;
-    compiled_read_scenario(scene_num);
-}
-
-read_set_3.onclick = function update(){
-    clear_all();
-    show_page(0);
-    scene = 2;
-    scene_num = 19;
-    compiled_read_scenario(scene_num);
-}
-
-read_set_4.onclick = function update(){
-    clear_all();
-    show_page(0);
-    scene = 2;
-    scene_num = 28;
-    compiled_read_scenario(scene_num);
-}
-
-
-prev_btn.onclick = function update(){
-    if(flag[0] == 0) {
-        if( scene_num >= 1){
-            scene_num--;
-        }
-        clear_all();
-        scene_num_1.content = scene_num;
-        testing.content = scene_num;
-        if(scene == 1) {
-            compiled_enable_scenario(scene_num);
-        }
-        if(scene == 2) {
-            compiled_read_scenario(scene_num);
-        }
-    }
-}
-next_btn.onclick = function update(){
-    // message_text.visible = true;
-    if(flag[0] == 0) {
-        clear_all();
-        scene_num++;
-        scene_num_1.content = scene_num;
-        testing.content = scene_num;
-        if(scene == 1) {
-            compiled_enable_scenario(scene_num);
-        }
-        if(scene == 2) {
-            compiled_read_scenario(scene_num);
-        }
-    }
-}
-
-play_btn.onclick = function update(){
-    if(flag[0] == 0 && scene == 1) {
-        clear_all();
-        compiled_enable_scenario(scene_num);
-    }
-    if(flag[0] == 0 && scene == 2) {
-        clear_all();
-        compiled_read_scenario(scene_num);
-    }
-}
-
-function show_overlay(){
-    document.getElementById('instructions_overlay').style.display = 'block';
-    instruction_overlay.visible = true;   
-}
-function hide_overlay(){
-    document.getElementById('instructions_overlay').style.display = 'none';
-    instruction_overlay.visible = false;  
-}   
 hide_overlay();
-close_instructions.onclick = function update(){
-    hide_overlay();
-    document.getElementById('master_popup').style.display = 'block';
-}
 
-close_prior.onclick = function update(){
-    document.getElementById('first_survey').style.display = 'none';   
-    document.getElementById('main').style.overflow = 'scroll';
-    show_overlay();  
-}
-
-show_instruction.onclick = function update(){
-    show_overlay();  
-    document.getElementById('master_popup').style.display = 'none';
-}
-
-feedback.onclick = function update(){
-    // document.getElementById('last_survey').style.display = 'block';  
-    // document.getElementById('main').style.overflow = 'hidden';
-    window.open('https://docs.google.com/forms/d/e/1FAIpQLSfsudw44xkbIPprUacfXZVv2Bh7PcKkoNJgQKEm0mIAG4tK3g/viewform?usp=sf_link', '_blank');
-}
-
-close_feedback.onclick = function update(){
-    // document.getElementById('last_survey').style.display = 'none';   
-    // document.getElementById('main').style.overflow = 'scroll';
-}
-
-function disable_play_buttons(){
-    document.getElementById('prev_btn').disabled = true;
-    document.getElementById('next_btn').disabled = true;
-    document.getElementById('play_btn').disabled = true;
-}
 disable_play_buttons();
-function enable_play_buttons(){
-    if(scene_num == 0) {
-        document.getElementById('prev_btn').disabled = true;
-    } else {
-        document.getElementById('prev_btn').disabled = false;
-    }
-    if(scene_num == 37 && scene == 2) {
-        console.log("disable true for scene 37");
-        document.getElementById('next_btn').disabled = true;
-    } else if(scene_num == 25 && scene == 1) {
-        document.getElementById('next_btn').disabled = true;
-    } else {
-        document.getElementById('next_btn').disabled = false;
-    }
-    document.getElementById('play_btn').disabled = false;
-}
+
 
 // var window = new Group();
 // window.addChild(layer1);
