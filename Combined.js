@@ -240,30 +240,30 @@ function sda_control(type, num){
     }
 }
 
-function scl_control(type, num){
-    for(var i = 11; i<22; i++){
-        if(type == 0 && i == num+11){
-            overlay_group.children[i].fillColor = 'lightblue';
-        } 
-        if(type == 1 && i == num+11){
-            overlay_group.children[i].fillColor = 'yellow';
-        }
-        if(type == 2 && i == num+11){
-            overlay_group.children[i].fillColor = 'white';
-        }
-    }
-}
+// function scl_control(type, num){
+//     for(var i = 11; i<22; i++){
+//         if(type == 0 && i == num+11){
+//             overlay_group.children[i].fillColor = 'lightblue';
+//         } 
+//         if(type == 1 && i == num+11){
+//             overlay_group.children[i].fillColor = 'yellow';
+//         }
+//         if(type == 2 && i == num+11){
+//             overlay_group.children[i].fillColor = 'white';
+//         }
+//     }
+// }
 
 function clock_pulse_control(){
     for(i=12; i<=20; i++){
         overlay_group.children[i].fillColor = 'lightblue';
     }
 }
-function clock_clear(){
-    for(i=12; i<=20; i++){
-        overlay_group.children[i].fillColor = 'lightblue';
-    }
-}
+// function clock_clear(){
+//     for(i=12; i<=20; i++){
+//         overlay_group.children[i].fillColor = 'lightblue';
+//     }
+// }
 
 function byte_control(type){
     clock_pulse_control();
