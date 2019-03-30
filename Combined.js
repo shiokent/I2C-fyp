@@ -2541,13 +2541,11 @@ function show_layer(num){
         case 1:
             layer1.visible = true;
             layer2.visible = false;
-            scenario.content = 'Enabling The Light Sensor';
             break;
         case 2:
             value_item.visible = false;
             layer1.visible = false;
             layer2.visible = true;
-            scenario.content = 'Reading From The Light Sensor';
             break;
     }
 
@@ -2672,6 +2670,7 @@ function clear_all(){
 enable_btn.onclick = function update(){
     clear_all();
     scene = 1;
+    scenario.content = 'Enabling The Light Sensor';
     scene_num = 0;
     scene_num_1.content = scene_num;
     testing.content = scene_num;
@@ -2686,6 +2685,7 @@ enable_set_2.onclick = function update(){
     clear_all();
     show_read_page(0);
     scene = 1;
+    scenario.content = 'Enabling The Light Sensor';
     scene_num = 10;
     compiled_enable_scenario(scene_num);
 }
@@ -2694,6 +2694,7 @@ enable_set_3.onclick = function update(){
     clear_all();
     show_read_page(0);
     scene = 1;
+    scenario.content = 'Enabling The Light Sensor';
     scene_num = 17;
     compiled_enable_scenario(scene_num);
 }
@@ -2701,6 +2702,7 @@ enable_set_3.onclick = function update(){
 read_btn.onclick = function update(){
     clear_all();
     scene = 2;
+    scenario.content = 'Reading From The Light Sensor';
     scene_num = 0;
     scene_num_1.content = scene_num;
     testing.content = scene_num;
@@ -2715,6 +2717,7 @@ read_set_2.onclick = function update(){
     clear_all();
     show_page(0);
     scene = 2;
+    scenario.content = 'Reading From The Light Sensor';
     scene_num = 10;
     compiled_read_scenario(scene_num);
 }
@@ -2723,6 +2726,7 @@ read_set_3.onclick = function update(){
     clear_all();
     show_page(0);
     scene = 2;
+    scenario.content = 'Reading From The Light Sensor';
     scene_num = 19;
     compiled_read_scenario(scene_num);
 }
@@ -2731,6 +2735,7 @@ read_set_4.onclick = function update(){
     clear_all();
     show_page(0);
     scene = 2;
+    scenario.content = 'Reading From The Light Sensor';
     scene_num = 28;
     compiled_read_scenario(scene_num);
 }
