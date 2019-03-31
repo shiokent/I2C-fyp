@@ -970,12 +970,14 @@ var digits1 = [1,1,1,1,1,1,1,1,1];
 
 
 //draw master box
+var master_group = new Group();
 var x1 = wave_coordinate.x[0];
 var y1 = wave_coordinate.y[0];
 var x2 = wave_coordinate.x[1];
 var y2 = wave_coordinate.y[1];
 var Master = new Rectangle(new Point(50, 55), new Size(150, 150));
 var path = new Path.Rectangle(Master);
+master_group.addChild(path);
 path.fillColor = 'lightblue';
 path.strokeColor = 'black';
 var text_m = new PointText(new Point(125, 135));
@@ -983,11 +985,15 @@ text_m.justification = 'center';
 text_m.fillColor = 'black';
 text_m.content = 'Master';
 text_m.fontSize = '30';
+master_group.addChild(text_m);
 var text = new PointText(new Point(170, 115));
 text.content = 'SDA';
+master_group.addChild(text);
 var text = new PointText(new Point(170, 175));
 text.content = 'SCL';
+master_group.addChild(text);
 //Draw content box function
+
 
 
 var height = 20;
@@ -1294,7 +1300,6 @@ function enable_scenario(num) {
             ack_control(1);
             ack_or_nack('y');
             change_waveform('00000000');
-            fill_num('000000000', number_text);
             break;
         case 3:
             all_waves.removeChildren();
@@ -1934,6 +1939,66 @@ function stop_scene(reg_address, reg_value){
     change_signal_item(read);
     transmit_stop(2, 4, 0, reg_address, reg_value);
 }
+function show_box_diagram(num){
+    for(var i = 0; i < box_diagram.children.length; i++){
+        if(i == num){
+            box_diagram.children[i].visible = true;
+        } else {
+            box_diagram.children[i].visible = false;
+        }
+    }
+}
+
+function show_read_box_diagram(num){
+    for(var i = 0; i < read_box_diagram.children.length; i++){
+        if(i == num){
+            read_box_diagram.children[i].visible = true;
+        } else {
+            read_box_diagram.children[i].visible = false;
+        }
+    }
+}
+
+
+function show_box_children(group, num){ 
+    for(var i = 0; i< group.children.length; i++){
+        if(i == num){
+            group.children[i].opacity = 1;
+            if(group.children[i].children.length == 3) {
+                group.children[i].children[0].strokeColor = 'darkgreen';
+                group.children[i].children[0].strokeWidth = 3;
+                group.children[i].children[1].fillColor = 'black';
+                group.children[i].children[2].fillColor = 'black';
+            } else if(group.children[i].children.length == 2){
+                group.children[i].children[0].children[0].strokeColor = 'darkgreen';
+                group.children[i].children[0].children[0].strokeWidth = 3;
+                group.children[i].children[0].children[1].fillColor = 'black';
+                group.children[i].children[0].children[2].fillColor = 'black';
+                group.children[i].children[1].children[0].strokeColor = 'darkgreen';
+                group.children[i].children[1].children[0].strokeWidth = 3;
+                group.children[i].children[1].children[1].fillColor = 'black';
+                group.children[i].children[1].children[2].fillColor = 'black';
+            }
+        }
+        else {
+            group.children[i].opacity = 0.5;
+            if(group.children[i].children.length == 3) {
+                group.children[i].children[0].strokeColor = 'black';
+                group.children[i].children[0].strokeWidth = 1;
+                group.children[i].children[1].fillColor = 'black';
+                group.children[i].children[2].fillColor = 'black';
+            } else if(group.children[i].children.length == 2){
+                group.children[i].children[0].children[0].strokeColor = 'black';
+                group.children[i].children[0].children[0].strokeWidth = 1;
+                group.children[i].children[0].children[1].fillColor = 'black';
+                group.children[i].children[0].children[2].fillColor = 'black';
+                group.children[i].children[1].children[0].strokeColor = 'black';
+                group.children[i].children[1].children[0].strokeWidth = 1;
+                group.children[i].children[1].children[1].fillColor = 'black';
+                group.children[i].children[1].children[2].fillColor = 'black';
+            }    
+        }
+    }
 
 // function movealong1path(path, object){
 //     object.visible = true;
@@ -1992,23 +2057,30 @@ for(var i = clones; i >=1; i--){
 for (var i = 0; i<5; i++){
     collection.children[i].children[1].fillColor= 'red';
 }
-
+var master_devices = new Group();
+var slave_devices = new Group();
 var path = new Path.Circle(new Point(105,80), big_radius);
+master_devices.addChild(path);
 path.fillColor='lightblue';
 for(var i = 1; i<5; i++){
     var circleclone = path.clone();
     circleclone.position +=new Point(0,i*spacing);
+    master_devices.addChild(circleclone);
 }
+
 var slave_circle = path.clone();
 slave_circle.fillColor = 'yellow';
 slave_circle.position += new Point(firstline*2+secondline*2+big_radius*2, 0);
+slave_devices.addChild(slave_circle);
 for(var i = 1; i<5; i++){
     var circleclone = slave_circle.clone();
     circleclone.position +=new Point(0,i*spacing);
+    slave_devices.addChild(circleclone);
 }
 
-diagram2_button = diagram1_button.clone();
+var diagram2_button = diagram1_button.clone();
 layer2.addChild(diagram2_button);
+diagram2_button.selected = true;
 diagram2_button.position += new Point(-100, 0);
 
 //invisible left lines drawing
@@ -2552,66 +2624,7 @@ function show_layer(num){
 }
 
 
-function show_box_diagram(num){
-    for(var i = 0; i < box_diagram.children.length; i++){
-        if(i == num){
-            box_diagram.children[i].visible = true;
-        } else {
-            box_diagram.children[i].visible = false;
-        }
-    }
-}
 
-function show_read_box_diagram(num){
-    for(var i = 0; i < read_box_diagram.children.length; i++){
-        if(i == num){
-            read_box_diagram.children[i].visible = true;
-        } else {
-            read_box_diagram.children[i].visible = false;
-        }
-    }
-}
-
-
-function show_box_children(group, num){ 
-    for(var i = 0; i< group.children.length; i++){
-        if(i == num){
-            group.children[i].opacity = 1;
-            if(group.children[i].children.length == 3) {
-                group.children[i].children[0].strokeColor = 'darkgreen';
-                group.children[i].children[0].strokeWidth = 3;
-                group.children[i].children[1].fillColor = 'black';
-                group.children[i].children[2].fillColor = 'black';
-            } else if(group.children[i].children.length == 2){
-                group.children[i].children[0].children[0].strokeColor = 'darkgreen';
-                group.children[i].children[0].children[0].strokeWidth = 3;
-                group.children[i].children[0].children[1].fillColor = 'black';
-                group.children[i].children[0].children[2].fillColor = 'black';
-                group.children[i].children[1].children[0].strokeColor = 'darkgreen';
-                group.children[i].children[1].children[0].strokeWidth = 3;
-                group.children[i].children[1].children[1].fillColor = 'black';
-                group.children[i].children[1].children[2].fillColor = 'black';
-            }
-        }
-        else {
-            group.children[i].opacity = 0.5;
-            if(group.children[i].children.length == 3) {
-                group.children[i].children[0].strokeColor = 'black';
-                group.children[i].children[0].strokeWidth = 1;
-                group.children[i].children[1].fillColor = 'black';
-                group.children[i].children[2].fillColor = 'black';
-            } else if(group.children[i].children.length == 2){
-                group.children[i].children[0].children[0].strokeColor = 'black';
-                group.children[i].children[0].children[0].strokeWidth = 1;
-                group.children[i].children[0].children[1].fillColor = 'black';
-                group.children[i].children[0].children[2].fillColor = 'black';
-                group.children[i].children[1].children[0].strokeColor = 'black';
-                group.children[i].children[1].children[0].strokeWidth = 1;
-                group.children[i].children[1].children[1].fillColor = 'black';
-                group.children[i].children[1].children[2].fillColor = 'black';
-            }    
-        }
-    }
     // switch(num){
     //     case 0:
     //         for(var i = 0; i<group.children.length; i++){
@@ -3605,11 +3618,7 @@ function compiled_read_scenario(num){
 var scene_num = 0;
 testing.content = scene_num;
 scene_num_1.content = scene_num;
-// function onKeyDown(event) {
-//     if(event.key == '1' && flag[0] == 0) {
-//         compiled_enable_scenario(scene_num);
-//     }
-// }
+
 
 
 //UI buttons

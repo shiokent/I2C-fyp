@@ -594,8 +594,9 @@ button.glowing{
   padding: 0px;
   z-index: 1;
 }
-/* #first_survey {
-} */
+#first_survey {
+  display: none;
+}
 #last_survey {
   display: none;
 }
