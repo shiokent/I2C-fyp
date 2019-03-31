@@ -1999,6 +1999,7 @@ function show_box_children(group, num){
             }    
         }
     }
+}
 
 // function movealong1path(path, object){
 //     object.visible = true;
@@ -2659,7 +2660,7 @@ function show_layer(num){
     //         }
     //         break;
     // }
-}
+
 
 function clear_waves(){
     all_waves.removeChildren();
