@@ -642,7 +642,7 @@ function move_waveform(destination, group){
             clone.scale(scaling);
             offset+=speed;
             progress_bar.dashArray = [offset1, 1000];
-            offset1+= progress_bar.length / (a*0.99);
+            offset1+= progress_bar.length / (a);
         } else {
             flag[0] = 0;
             clone.removeChildren();
@@ -2081,7 +2081,6 @@ for(var i = 1; i<5; i++){
 
 var diagram2_button = diagram1_button.clone();
 layer2.addChild(diagram2_button);
-diagram2_button.selected = true;
 diagram2_button.position += new Point(-100, 0);
 
 //invisible left lines drawing
